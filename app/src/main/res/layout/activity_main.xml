@@ -19,7 +19,7 @@
         <EditText
             android:hint="where are you?"
             android:id="@+id/location"
-            android:layout_width="243dp"
+            android:layout_width="149dp"
             android:layout_height="wrap_content" />
 
         <Button
@@ -27,6 +27,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="wifiCheck" />
+        <Button
+            android:id="@+id/setLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="set" />
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

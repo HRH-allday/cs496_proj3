@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -34,6 +35,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private Button check_btn;
+    private Button set_btn;
     private TextView info_text;
     private TextView num_found;
     private String location;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private JSONArray json_wifiinfo;
     private JSONObject postData;
     private WifiManager wifiManager;
+
+    private int set = 0;
 
     private static final int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 100;
 
@@ -77,8 +81,17 @@ public class MainActivity extends AppCompatActivity {
                     postData.put("token", FirebaseInstanceId.getInstance().getToken());
                     postData.put("location", location);
                     postData.put("info", json_wifiinfo);
-                    PostThread p = new PostThread(postData, "/wifi_info");
-                    p.start();
+                    if(set == 1){
+                        Toast.makeText(getApplicationContext(),"퀘스트 지점이 등록되었습니다!", Toast.LENGTH_LONG).show();
+                        set = 0;
+                        PostThread p = new PostThread(postData, "/set_location");
+                        p.start();
+
+                    }
+                    else {
+                        PostThread p = new PostThread(postData, "/wifi_info");
+                        p.start();
+                    }
                     num_found.setText("number found : " + count);
                     //mAdapter.sort();
                     mAdapter.notifyDataSetChanged();
@@ -100,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         check_btn = (Button) findViewById(R.id.wifiCheck);
+        set_btn = (Button) findViewById(R.id.setLocation);
         //info_text = (TextView) findViewById(R.id.info_text);
         num_found = (TextView) findViewById(R.id.numFound);
 
@@ -142,6 +156,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText loc = (EditText) findViewById(R.id.location);
                 location = loc.getText().toString().trim();
+                loc.setText("");
+                Log.i("start","hi");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("need","perm");
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION);
+                }else{
+                    wifiManager.startScan();
+                }
+            }
+        });
+
+        set_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText loc = (EditText) findViewById(R.id.location);
+                location = loc.getText().toString().trim();
+                set = 1;
                 loc.setText("");
                 Log.i("start","hi");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

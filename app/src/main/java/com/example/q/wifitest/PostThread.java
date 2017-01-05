@@ -20,7 +20,7 @@ public class PostThread extends Thread {
 
     private HttpURLConnection huc;
     private URL u;
-    private String ec2url = "http://ec2-52-79-155-110.ap-northeast-2.compute.amazonaws.com:3000";
+    private String ec2url = "http://ec2-52-79-95-160.ap-northeast-2.compute.amazonaws.com:3000";
     private String localurl = "http://143.248.49.213:3000";
     private JSONObject data;
     private String route;
@@ -35,7 +35,7 @@ public class PostThread extends Thread {
         super.run();
         Log.i("entered","hi");
         try {
-            u = new URL(localurl + route);
+            u = new URL(ec2url + route);
             Log.i("connected", "");
             huc = (HttpURLConnection) u.openConnection();
             Log.i("open", "");
