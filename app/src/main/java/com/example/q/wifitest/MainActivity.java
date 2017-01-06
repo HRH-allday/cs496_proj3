@@ -138,8 +138,45 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JSONObject jobject) {
-            //TODO : 받은 UI대로 UI 세팅
-            System.out.println("wtf : " + jobject.toString());
+            try {
+                boolean background_isdefault = jobject.getBoolean("background_isdefault");
+                String background_value = jobject.getString("background_value");
+                int font_color = jobject.getInt("font_color");
+                int font_size = jobject.getInt("font_size");
+                int font = jobject.getInt("font");
+                boolean etc_isspaced = jobject.getBoolean("etc_isspaced");
+                int coin = jobject.getInt("coin");
+
+                if (background_isdefault) {
+                    int background_index = Integer.parseInt(background_value);
+                    imageView.setImageResource(images[background_index]);
+                } else {
+                    // set background by image
+                }
+
+                if (font_color != -1) {
+                    // set text color
+                }
+
+                if (font_size != -1) {
+                    // set text size
+                }
+
+                if (font != -1) {
+                    textView.setText(texts[font]);
+                }
+
+                if (etc_isspaced) {
+                    // set text spaced
+                } else {
+                    // set text nonspaced
+                }
+
+                // set coin
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
