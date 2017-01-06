@@ -1,13 +1,29 @@
 package com.example.q.wifitest;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.main_background);
         textView = (TextView) findViewById(R.id.main_test);
+
+        new GetUserData().execute();
     }
 
     @Override
@@ -71,6 +89,67 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageResource(images[data.getExtras().getInt("background_index")]);
             if (data.getExtras().getInt("font_index") != -1)
                 textView.setText(texts[data.getExtras().getInt("font_index")]);
+        }
+    }
+
+    private class GetUserData extends AsyncTask<Void, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            URL url;
+            StringBuffer response = null;
+            JSONObject jobject = null;
+
+            try {
+                url = new URL("http://ec2-52-79-95-160.ap-northeast-2.compute.amazonaws.com:3000/app_start");
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+                String token = FirebaseInstanceId.getInstance().getToken();
+                JSONObject token_jobject = new JSONObject();
+                token_jobject.put("token", token);
+
+                OutputStream out_stream = conn.getOutputStream();
+
+                out_stream.write(token_jobject.toString().getBytes());
+                out_stream.flush();
+                out_stream.close();
+
+                if (conn.getResponseCode() != 200) {
+                    throw new RuntimeException("Failed : HTTP error code : "
+                            + conn.getResponseCode());
+                }
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+                response = new StringBuffer();
+                String input_line;
+
+                while ((input_line = in.readLine()) != null) {
+                    System.out.println("input_line : " + input_line);
+                    response.append(input_line);
+                }
+                in.close();
+
+                jobject = new JSONObject(response.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return jobject;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... params) {
+
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jobject) {
+            //TODO : 받은 UI대로 UI 세팅
+            System.out.println("wtf : " + jobject.toString());
         }
     }
 }

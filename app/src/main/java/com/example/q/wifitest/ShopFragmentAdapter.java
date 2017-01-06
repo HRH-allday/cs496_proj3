@@ -3,12 +3,24 @@ package com.example.q.wifitest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Created by q on 2017-01-05.
@@ -69,16 +81,8 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 buyDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO : buy item
+                        new SaveBuyInfo().execute(from, i);
                         dialog.cancel();
-                        AlertDialog.Builder buyCompleteDialog = new AlertDialog.Builder(mContext);
-                        buyCompleteDialog.setTitle("Buy Complete");
-                        buyCompleteDialog.setMessage("구입이 완료되었습니다.");
-                        buyCompleteDialog.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                        buyCompleteDialog.show();
                     }
                 });
                 buyDialog.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
@@ -112,6 +116,96 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 case 2 :
                     this.textView = (TextView) view.findViewById(R.id.etc_item_text);
                     break;
+            }
+        }
+    }
+
+    private class SaveBuyInfo extends AsyncTask<Integer, Void, JSONObject> {
+        @Override
+        protected JSONObject doInBackground(Integer... params) {
+            URL url;
+            StringBuffer response = null;
+            JSONObject jobject = null;
+            int type = params[0];
+            int position = params[1];
+
+            try {
+                url = new URL("http://ec2-52-79-95-160.ap-northeast-2.compute.amazonaws.com:3000/buy_item");
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+
+                String token = FirebaseInstanceId.getInstance().getToken();
+
+                jobject = new JSONObject();
+                jobject.put("token", token);
+                jobject.put("buy_type", type);
+                jobject.put("buy_item", position);
+
+                OutputStream out_stream = conn.getOutputStream();
+
+                out_stream.write(jobject.toString().getBytes());
+                out_stream.flush();
+                out_stream.close();
+
+                if (conn.getResponseCode() != 200) {
+                    throw new RuntimeException("Failed : HTTP error code : "
+                            + conn.getResponseCode());
+                }
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+                response = new StringBuffer();
+                String input_line;
+
+                while ((input_line = in.readLine()) != null) {
+                    System.out.println("input_line : " + input_line);
+                    response.append(input_line);
+                }
+                in.close();
+
+                jobject = new JSONObject(response.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return jobject;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... params) {
+
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject jobject) {
+            try {
+                System.out.println(jobject.getString("result"));
+                if (jobject.getString("result").compareTo("success") == 0) {
+                    AlertDialog.Builder buyCompleteDialog = new AlertDialog.Builder(mContext);
+                    buyCompleteDialog.setTitle("Buy Complete");
+                    buyCompleteDialog.setMessage("구입이 완료되었습니다.");
+                    buyCompleteDialog.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    buyCompleteDialog.show();
+                } else {
+                    AlertDialog.Builder alreadyBoughtDialog = new AlertDialog.Builder(mContext);
+                    alreadyBoughtDialog.setTitle("Already Bought");
+                    alreadyBoughtDialog.setMessage("이미 구입하셨던 항목입니다.");
+                    alreadyBoughtDialog.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alreadyBoughtDialog.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
