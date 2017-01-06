@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton goto_shop;
     private FloatingActionButton goto_customize;
+    private FloatingActionButton goto_scan;
     private ImageView imageView;
     private TextView textView;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         goto_shop = (FloatingActionButton) findViewById(R.id.main_goto_shop);
         goto_customize = (FloatingActionButton) findViewById(R.id.main_goto_customize);
+        goto_scan = (FloatingActionButton) findViewById(R.id.main_goto_scan);
 
         goto_shop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), CustomizeActivity.class);
                 startActivityForResult(i, SAVE_NEW_THEME);
                 overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
+            }
+        });
+
+        goto_scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ScanActivity.class);
+                startActivity(i);
             }
         });
 
