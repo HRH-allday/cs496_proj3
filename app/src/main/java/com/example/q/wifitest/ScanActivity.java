@@ -116,7 +116,7 @@ public class ScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scan);
 
 
         check_btn = (Button) findViewById(R.id.wifiCheck);
@@ -184,7 +184,11 @@ public class ScanActivity extends AppCompatActivity {
         stop_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sw.interrupt();
+                try{
+                    sw.wait();
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             }
         });
 
