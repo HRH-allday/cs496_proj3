@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/gray">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:text="상점"
+        android:textSize="20sp"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/shop_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#FFFFFF"
+        android:layout_marginTop="50dp"/>
+
+    <com.example.q.wifitest.NonSwipeableViewPager
+        android:id="@+id/shop_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/black"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+        <TextView
+            android:id="@+id/shop_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="구천구백코인"
+            android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/shop_notice_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="자산 : "
+            android:layout_toLeftOf="@id/shop_coin"/>
+    </RelativeLayout>
+</LinearLayout>

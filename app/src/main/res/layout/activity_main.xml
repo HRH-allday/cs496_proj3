@@ -1,63 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.q.wifitest.MainActivity">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:hint="where are you?"
-            android:id="@+id/location"
-            android:layout_width="149dp"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/wifiCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="wifiCheck" />
-        <Button
-            android:id="@+id/setLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="set" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/numFound"
-            android:layout_width="242dp"
-            android:layout_height="wrap_content"
-            android:text="number found : 0"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/sendNotify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="notify" />
-    </LinearLayout>
-
-    <ListView
-        android:id="@+id/mList"
+    android:orientation="vertical"
+    android:background="@color/gray">
+    <ImageView
+        android:id="@+id/main_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"></ListView>
-</LinearLayout>
+        android:layout_marginTop="130dp">
+        <TextView
+            android:id="@+id/main_ui"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="이것이 지금 당신의 UI."
+            android:textSize="20sp"
+            android:textColor="@color/deep_black"
+            android:layout_marginBottom="5dp"/>
+        <TextView
+            android:id="@+id/main_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/main_ui"
+            android:text="@string/init_title"
+            android:textSize="15sp"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/main_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@+id/main_title"
+            android:text="test"
+            android:textSize="15sp"
+            android:textColor="@color/black" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+            <TextView
+                android:id="@+id/main_notice_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="자산 : " />
+            <TextView
+                android:id="@+id/main_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="구천구백코인"
+                android:layout_toRightOf="@id/main_notice_coin"/>
+        </RelativeLayout>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_goto_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_goto_shop"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="10dp"/>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_goto_customize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/main_goto_shop"
+            android:layout_alignParentRight="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_goto_customize"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="10dp" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/main_goto_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/main_goto_customize"
+            android:layout_alignParentRight="true"
+            android:scaleType="center"
+            android:src="@drawable/ic_action_scan"
+            android:background="@android:color/transparent" />
+    </RelativeLayout>
+</FrameLayout>

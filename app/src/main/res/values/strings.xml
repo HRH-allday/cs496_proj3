@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">WifiTest</string>
+    <string name="app_name">Wifitest</string>
+    <string name="init_title">\" 고조선 \"</string>
+    <string name="font1">font 1</string>
+    <string name="font2">font 2</string>
+    <string name="font3">font 3</string>
+    <string name="font4">font 4</string>
+    <string name="font5">font 5</string>
+    <string name="font6">font 6</string>
 </resources>
