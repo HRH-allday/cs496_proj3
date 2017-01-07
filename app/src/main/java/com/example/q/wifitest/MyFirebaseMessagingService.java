@@ -16,17 +16,19 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class MyFirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
     private static final String TAG = "FirebaseMsgService";
-
+    private Class[] gameList = {FlyingPacman.class};
     // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         //추가한것
-        sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        String[] body = remoteMessage.getNotification().getBody().split("#");
+        sendNotification(remoteMessage.getNotification().getTitle(), body[0], body[1]);
     }
 
-    private void sendNotification(String messageTitle, String messageBody) {
-        Intent intent = new Intent(this, FlyingPacman.class);
+    private void sendNotification(String messageTitle, String messageBody, String gameNum) {
+        int gNum = Integer.parseInt(gameNum);
+        Intent intent = new Intent(this, gameList[gNum]);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

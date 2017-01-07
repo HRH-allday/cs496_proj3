@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
+import android.widget.TextView;
 
 /**
  * Created by q on 2017-01-05.
@@ -14,12 +15,15 @@ public class ShopActivity extends AppCompatActivity implements TabLayout.OnTabSe
     TabLayout tabLayout;
     ViewPager viewPager;
     ShopAdapter adapter;
+    TextView coinView;
+    int money;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_shop);
+        money = MainActivity.coin;
 
         tabLayout = (TabLayout) findViewById(R.id.shop_tablayout);
 
@@ -35,6 +39,9 @@ public class ShopActivity extends AppCompatActivity implements TabLayout.OnTabSe
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.addOnTabSelectedListener(this);
+
+        coinView = (TextView) findViewById(R.id.shop_coin);
+        coinView.setText(money+"원");
     }
 
     @Override
@@ -57,4 +64,5 @@ public class ShopActivity extends AppCompatActivity implements TabLayout.OnTabSe
         super.onBackPressed();
         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
     }
+
 }

@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -26,20 +25,47 @@ import java.net.URL;
  * Created by q on 2017-01-05.
  */
 
-public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapter.CustomViewHolder>  {
+public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapter.CustomViewHolder>{
     private Integer[] images = { R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6 };
+    private Integer[] imagePrices = {20, 30, 40, 50, 60, 70};
     private Integer[] texts = {R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
     private int from;
     private Context mContext;
+    private BackgroundFragment bf = null;
+    private FontFragment ff = null;
+    private EtcFragment ef = null;
+    private ShopActivity sa;
+    private int job;
+    private int money;
+
 
     public ShopFragmentAdapter(Context context, int from) {
         mContext = context;
         this.from = from;
     }
+    public ShopFragmentAdapter(Context context, int from, BackgroundFragment backgroundFragment) {
+        mContext = context;
+        this.from = from;
+        this.bf = backgroundFragment;
+        this.job = 0;
+    }
+    public ShopFragmentAdapter(Context context, int from, FontFragment fontFragment) {
+        mContext = context;
+        this.from = from;
+        this.ff = fontFragment;
+        this.job = 1;
+    }
+    public ShopFragmentAdapter(Context context, int from, EtcFragment etcFragment) {
+        mContext = context;
+        this.from = from;
+        this.ef = etcFragment;
+        this.job = 2;
+    }
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view;
+        this.money = MainActivity.coin;
         switch (from) {
             case 0 :
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.background_item, viewGroup, false);
@@ -59,38 +85,64 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder customViewHolder, final int i) {
+    public void onBindViewHolder(CustomViewHolder customViewHolder, final int position) {
         switch (from) {
             case 0 :
-                customViewHolder.imageView.setImageResource(images[i]);
+                customViewHolder.imageView.setImageResource(images[position]);
                 break;
             case 1 :
-                customViewHolder.textView.setText(texts[i]);
+                customViewHolder.textView.setText(texts[position]);
                 break;
             case 2 :
-                customViewHolder.textView.setText(texts[i]);
+                customViewHolder.textView.setText(texts[position]);
                 break;
         }
 
         customViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder buyDialog = new AlertDialog.Builder(mContext);
-                buyDialog.setTitle("Buy");
-                buyDialog.setMessage(i + "번째 아이템을 구입하시겠습니까?");
-                buyDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //TODO : buy item
-                        new SaveBuyInfo().execute(from, i);
-                        dialog.cancel();
-                    }
-                });
-                buyDialog.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                buyDialog.show();
+                final int price = imagePrices[position];
+                if(price > money){
+                    AlertDialog.Builder noMoney = new AlertDialog.Builder(mContext);
+                    noMoney.setTitle("Need More Money");
+                    noMoney.setMessage("돈이 부족합니다");
+                    noMoney.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    return;
+                }
+                else {
+                    AlertDialog.Builder buyDialog = new AlertDialog.Builder(mContext);
+                    buyDialog.setTitle("Buy");
+                    buyDialog.setMessage(position + 1 + "번째 아이템을 구입하시겠습니까?");
+                    buyDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            //TODO : buy item
+                            money -= price;
+                            switch (job) {
+                                case 0 :
+                                    bf.onShopClickHandler(money);
+                                    break;
+                                case 1 :
+                                    ff.onShopClickHandler(money);
+                                    break;
+                                case 2 :
+                                    ef.onShopClickHandler(money);
+                                    break;
+                            }
+                            new ShopFragmentAdapter.SaveBuyInfo().execute(from, position);
+                            dialog.cancel();
+                        }
+                    });
+                    buyDialog.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    buyDialog.show();
+                }
             }
         });
     }
@@ -120,6 +172,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
         }
     }
 
+
     private class SaveBuyInfo extends AsyncTask<Integer, Void, JSONObject> {
         @Override
         protected JSONObject doInBackground(Integer... params) {
@@ -143,6 +196,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 jobject.put("token", token);
                 jobject.put("buy_type", type);
                 jobject.put("buy_item", position);
+                jobject.put("left_money", money);
 
                 OutputStream out_stream = conn.getOutputStream();
 

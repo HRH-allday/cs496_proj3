@@ -1,13 +1,10 @@
 package com.example.q.wifitest;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -15,11 +12,9 @@ import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -39,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton goto_scan;
     private ImageView imageView;
     private TextView textView;
+    private TextView coinView;
+    static int coin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +75,14 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.main_background);
         textView = (TextView) findViewById(R.id.main_test);
+        coinView = (TextView) findViewById(R.id.main_coin);
 
+        new GetUserData().execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         new GetUserData().execute();
     }
 
@@ -155,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
                 int font_size = jobject.getInt("font_size");
                 int font = jobject.getInt("font");
                 boolean etc_isspaced = jobject.getBoolean("etc_isspaced");
-                int coin = jobject.getInt("coin");
+                coin = jobject.getInt("coin");
+
 
                 if (background_isdefault) {
                     int background_index = Integer.parseInt(background_value);
@@ -182,8 +187,10 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // set text nonspaced
                 }
-
-                // set coin
+                if (coin != -1) {
+                    // set coin
+                    coinView.setText(""+coin+"원");
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
