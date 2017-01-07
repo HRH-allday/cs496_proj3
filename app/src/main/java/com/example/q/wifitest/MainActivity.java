@@ -159,7 +159,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (background_isdefault) {
                     int background_index = Integer.parseInt(background_value);
-                    imageView.setImageResource(images[background_index]);
+                    if (background_index != -1)
+                        imageView.setImageResource(images[background_index]);
                 } else {
                     // set background by image
                 }
