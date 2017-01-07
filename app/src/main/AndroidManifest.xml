@@ -25,6 +25,8 @@
         <activity android:name=".ShopActivity" />
         <activity android:name=".CustomizeActivity" />
         <activity android:name=".ScanActivity" />
+        <activity android:name=".GameResultPacman" />
+        <activity android:name=".FlyingPacman"/>
 
         <service
             android:name=".MyFirebaseMessagingService">

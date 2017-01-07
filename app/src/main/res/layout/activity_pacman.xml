@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/scoreLabel"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:text="Score : 300"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/startLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="130dp"
+            android:paddingLeft="10dp"
+            android:text="Tab to Start"
+            android:textSize="40sp" />
+
+        <ImageView
+            android:id="@+id/box"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/pacman" />
+
+        <ImageView
+            android:id="@+id/black1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black3"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black4"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black6"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black7"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black8"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black9"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+        <ImageView
+            android:id="@+id/black10"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/black" />
+
+        <ImageView
+            android:id="@+id/bluey"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/bluey" />
+
+        <ImageView
+            android:id="@+id/redy"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/redy" />
+
+        <ImageView
+            android:id="@+id/yellowy"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/yellowy" />
+
+
+    </FrameLayout>
+</LinearLayout>
