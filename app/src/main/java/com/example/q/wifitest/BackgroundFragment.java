@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -18,7 +19,14 @@ public class BackgroundFragment extends Fragment {
     private RecyclerView backgroundList;
     private RecyclerView.Adapter adapter;
 
-    public BackgroundFragment() { from = -1; }
+    public BackgroundFragment(){
+        from = -1;
+    }
+
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -29,15 +37,17 @@ public class BackgroundFragment extends Fragment {
         backgroundList.setLayoutManager(layoutManager);
 
         if (from == MainActivity.CREATED_FROM_SHOP)
-            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 0);
+            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 0, this);
         else if (from == MainActivity.CREATED_FROM_CUSTOMIZE)
             adapter = (RecyclerView.Adapter) new CustomizeFragmentAdapter((CustomizeActivity)getActivity(), 0);
         backgroundList.setAdapter(adapter);
 
         return view;
     }
-
-    public void setFrom(int from) {
-        this.from = from;
+    public void onShopClickHandler(int coinLeft){
+        TextView coinView = (TextView) getActivity().findViewById(R.id.shop_coin);
+        coinView.setText(coinLeft+"원");
     }
+
+
 }

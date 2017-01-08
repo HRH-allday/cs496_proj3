@@ -40,6 +40,7 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     private CustomizeAdapter adapter;
     private ImageView imageView;
     private TextView textView;
+    private TextView coinView;
     private RelativeLayout relativeLayout;
     private FrameLayout frameLayout;
     private Button save_btn;
@@ -91,6 +92,8 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         });
 
         textView = (TextView) findViewById(R.id.customize_preview_test);
+        coinView = (TextView) findViewById(R.id.customize_preview_coin);
+        coinView.setText(MainActivity.coin +"원");
 
         save_btn = (Button) findViewById(R.id.customize_save_btn);
         save_btn.setOnClickListener(new View.OnClickListener() {

@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by q on 2017-01-07.
  */
@@ -36,6 +41,16 @@ public class GameResultPacman extends Activity{
             editor.commit();
         }else{
             highScore.setText("Best Score : "+highest );
+        }
+
+        try {
+            JSONObject jobj = new JSONObject();
+            jobj.put("coin", score);
+            jobj.put("token", FirebaseInstanceId.getInstance().getToken());
+            PostThread p = new PostThread(jobj, "/game_result");
+            p.start();
+        }catch (JSONException e){
+            e.printStackTrace();
         }
 
         Button btn = (Button) findViewById(R.id.restart);
