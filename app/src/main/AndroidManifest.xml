@@ -27,6 +27,8 @@
         <activity android:name=".ScanActivity" />
         <activity android:name=".GameResultPacman" />
         <activity android:name=".FlyingPacman"/>
+        <activity android:name=".ClickFollower"/>
+        <activity android:name=".ClickFollowerGameOver"/>
 
         <service
             android:name=".MyFirebaseMessagingService">

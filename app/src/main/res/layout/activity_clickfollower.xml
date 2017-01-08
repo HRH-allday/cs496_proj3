@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="80dp">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/clickframe"
         android:layout_width="match_parent"
@@ -10,5 +12,23 @@
         android:id="@+id/change_col_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="increase"/>
+        android:layout_gravity="center"
+        android:text="Start"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/clickfollower_indicate_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score : " />
+        <TextView
+            android:id="@+id/clickfollower_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/clickfollower_indicate_score"
+            android:text="0"/>
+    </RelativeLayout>
 </LinearLayout>
