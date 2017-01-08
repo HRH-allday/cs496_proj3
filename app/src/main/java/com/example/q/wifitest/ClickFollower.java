@@ -228,6 +228,7 @@ public class ClickFollower extends AppCompatActivity {
             Intent i = new Intent(ClickFollower.this, ClickFollowerGameOver.class);
             i.putExtra("score", score);
             startActivity(i);
+            finish();
         }
     }
 
