@@ -91,7 +91,7 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
             }
         });
 
-        textView = (TextView) findViewById(R.id.customize_preview_test);
+        textView = (TextView) findViewById(R.id.customize_preview_font);
         coinView = (TextView) findViewById(R.id.customize_preview_coin);
         coinView.setText(MainActivity.coin +"원");
 

@@ -43,9 +43,10 @@
                 android:layout_below="@+id/customize_preview_ui"
                 android:text="@string/init_title"
                 android:textSize="8sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:layout_marginBottom="3dp"/>
             <TextView
-                android:id="@+id/customize_preview_test"
+                android:id="@+id/customize_preview_font"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -54,6 +55,7 @@
                 android:textSize="8sp"
                 android:textColor="@color/black" />
             <RelativeLayout
+                android:id="@+id/customize_preview_show_coin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true">
