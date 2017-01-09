@@ -91,10 +91,10 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
                 public void onClick(View v) {
                 switch (from) {
                     case 0:
-                        customizeActivity.setPreviewBackground(images[i], i);
+                        customizeActivity.setPreviewBackground(i);
                         break;
                     case 1:
-                        customizeActivity.setPreviewFont(texts[i], i);
+                        customizeActivity.setPreviewFont(i);
                         break;
                     default:
                         break;

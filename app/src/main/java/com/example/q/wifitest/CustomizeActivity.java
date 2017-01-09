@@ -204,15 +204,15 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
     }
 
-    public void setPreviewBackground(int id, int index) {
-        imageView.setImageResource(id);
+    public void setPreviewBackground(int index) {
+        imageView.setImageResource(MainActivity.images[index]);
         background_index = index;
     }
 
-    public void setPreviewFont(int id, int index) {
+    public void setPreviewFont(int index) {
         for(int i = 0 ; i < numViews ; i++){
             if(isTextViewSelected[i]) {
-                textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[id]));
+                textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[index]));
                 isTextViewSelected[i] = false;
                 font_index[i] = index;
             }
@@ -243,13 +243,18 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         for(int i = 0 ; i < numViews ; i++){
             if(isTextViewSelected[i]) {
                 if(space_index[i]) {
-                    textViews[i].setText(unspacedTexts[i]);
+                    if (i == 2)
+                        textViews[i].setText(getResources().getString(unspacedTexts[i]) + MainActivity.coin + "원");
+                    else
+                        textViews[i].setText(unspacedTexts[i]);
                     space_index[i] = false;
-                }else{
-                    textViews[i].setText(spacedTexts[i]);
+                } else {
+                    if (i == 2)
+                        textViews[i].setText(getResources().getString(spacedTexts[i]) + MainActivity.coin + "원");
+                    else
+                        textViews[i].setText(spacedTexts[i]);
                     space_index[i] = true;
                 }
-                isTextViewSelected[i] = false;
             }
         }
     }

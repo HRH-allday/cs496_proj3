@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="이것이 지금 당신의 UI."
+            android:text="@string/text_unspaced0"
             android:textSize="20sp"
             android:textColor="@color/deep_black"
             android:layout_marginBottom="5dp"/>
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_below="@+id/main_ui"
-            android:text="@string/init_title"
+            android:text="@string/text_unspaced1"
             android:textSize="15sp"
             android:textColor="@color/black" />
         <RelativeLayout

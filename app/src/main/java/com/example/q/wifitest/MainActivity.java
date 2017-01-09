@@ -112,6 +112,12 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.main_background);
         coinView = (TextView) findViewById(R.id.main_coin);
 
+        textViews = new TextView[] {
+                (TextView) findViewById(R.id.main_ui),
+                (TextView) findViewById(R.id.main_title),
+                (TextView) findViewById(R.id.main_coin)
+        };
+
         new GetUserData().execute();
     }
 
@@ -225,17 +231,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                     textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[font_ind]));
                     if (spaced) {
-                        textViews[i].setText(unspacedTexts[i]);
-                    }else{
                         textViews[i].setText(spacedTexts[i]);
+                        coinView.setText("자산 : "+coin+"원");
+                    }else{
+                        textViews[i].setText(unspacedTexts[i]);
+                        coinView.setText("자산:"+coin+"원");
                     }
 
                 }
 
-                if (coin != -1) {
-                    // set coin
-                    coinView.setText("자산 : "+coin+"원");
-                }
 
             } catch (Exception e) {
                 e.printStackTrace();
