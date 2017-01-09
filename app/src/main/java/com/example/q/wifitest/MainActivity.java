@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton goto_scan;
     private FloatingActionButton goto_game;
     private ImageView imageView;
-    private TextView textView;
     private TextView coinView;
     static int coin;
 
@@ -93,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         imageView = (ImageView) findViewById(R.id.main_background);
-        textView = (TextView) findViewById(R.id.main_test);
         coinView = (TextView) findViewById(R.id.main_coin);
 
         new GetUserData().execute();
@@ -118,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == SAVE_NEW_THEME) {
             if (data.getExtras().getInt("background_index") != -1)
                 imageView.setImageResource(images[data.getExtras().getInt("background_index")]);
-            if (data.getExtras().getInt("font_index") != -1)
-                textView.setText(texts[data.getExtras().getInt("font_index")]);
         }
     }
 
@@ -206,8 +202,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (font != -1) {
-                    textView.setText(texts[font]);
-                    switch (font_color) {
+                    switch (font) {
                         case 0 :
                             FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/goongseo.TTF");
                             fontChanger.replaceFonts((ViewGroup) findViewById(android.R.id.content));
@@ -222,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (coin != -1) {
                     // set coin
-                    coinView.setText(""+coin+"원");
+                    coinView.setText("자산 : "+coin+"원");
                 }
 
             } catch (Exception e) {

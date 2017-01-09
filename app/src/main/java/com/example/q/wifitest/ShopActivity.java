@@ -41,7 +41,7 @@ public class ShopActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout.addOnTabSelectedListener(this);
 
         coinView = (TextView) findViewById(R.id.shop_coin);
-        coinView.setText(money+"원");
+        coinView.setText("자산"+money+"원");
     }
 
     @Override
