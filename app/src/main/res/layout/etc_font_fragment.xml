@@ -4,14 +4,14 @@
     android:layout_height="match_parent"
     android:gravity="center">
     <EditText
-        android:id="@+id/font_size_input"
+        android:id="@+id/etc_font_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:hint="폰트 크기 입력"
         android:layout_weight="1"/>
     <Button
-        android:id="@+id/font_size_submit"
+        android:id="@+id/etc_font_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="변경"
