@@ -15,7 +15,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,11 +27,19 @@
         <activity android:name=".ShopActivity" />
         <activity android:name=".CustomizeActivity" />
         <activity android:name=".ScanActivity" />
-        <activity android:name=".GameResultPacman" />
-        <activity android:name=".FlyingPacman"/>
+        <activity android:name=".GameResultPacman"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FlyingPacman"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ClickFollower"/>
         <activity android:name=".ClickFollowerGameOver"/>
         <activity android:name=".VoiceFollower"/>
+        <activity android:name=".BouncyBallStage1"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".BouncyBallStage2"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".GameResultBouncyBall"
+        android:screenOrientation="landscape"/>
 
         <service
             android:name=".MyFirebaseMessagingService">

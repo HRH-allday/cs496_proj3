@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Intent i = new Intent(getApplicationContext(), ClickFollower.class);
-                Intent i = new Intent(getApplicationContext(), VoiceFollower.class);
+                Intent i = new Intent(getApplicationContext(),  BouncyBallStage1.class);
                 startActivity(i);
             }
         });
