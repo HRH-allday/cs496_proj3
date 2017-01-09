@@ -4,76 +4,76 @@
     android:layout_height="match_parent"
     android:background="#333333">
     <FrameLayout
-        android:id="@+id/customize_framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:foregroundGravity="center"
+        android:gravity="center"
         android:layout_weight="1">
-        <ImageView
-            android:id="@+id/customize_preview_background"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/customize_select_all_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="center"
+            android:src="@drawable/ic_select_all_btn" />
+        <FrameLayout
+            android:id="@+id/customize_framelayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:background="@color/gray"/>
-        <RelativeLayout
-            android:id="@+id/customize_preview_texts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="7dp"
-            android:paddingBottom="7dp"
-            android:paddingLeft="7dp"
-            android:paddingRight="7dp">
-            <TextView
-                android:id="@+id/customize_preview_ui"
+            android:foregroundGravity="center">
+            <ImageView
+                android:id="@+id/customize_preview_background"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="이것이 지금 당신의 UI."
-                android:textSize="12sp"
-                android:textColor="@color/deep_black"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="70dp"/>
-            <TextView
-                android:id="@+id/customize_preview_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_below="@+id/customize_preview_ui"
-                android:text="@string/init_title"
-                android:textSize="8sp"
-                android:textColor="@color/black"
-                android:layout_marginBottom="3dp"/>
-            <TextView
-                android:id="@+id/customize_preview_font"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_below="@+id/customize_preview_title"
-                android:text="test"
-                android:textSize="8sp"
-                android:textColor="@color/black" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/gray"/>
             <RelativeLayout
-                android:id="@+id/customize_preview_show_coin"
+                android:id="@+id/customize_preview_texts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingTop="7dp"
+                android:paddingBottom="7dp"
+                android:paddingLeft="7dp"
+                android:paddingRight="7dp">
                 <TextView
-                    android:id="@+id/customize_preview_notice_coin"
+                    android:id="@+id/customize_preview_ui"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="자산 : "
-                    android:textSize="7sp"/>
+                    android:layout_centerHorizontal="true"
+                    android:text="이것이 지금 당신의 UI."
+                    android:textSize="12sp"
+                    android:textColor="@color/deep_black"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="90dp"/>
                 <TextView
-                    android:id="@+id/customize_preview_coin"
+                    android:id="@+id/customize_preview_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="구천구백코인"
-                    android:textSize="7sp"
-                    android:layout_toRightOf="@id/customize_preview_notice_coin"/>
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/customize_preview_ui"
+                    android:text="@string/init_title"
+                    android:textSize="8sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="3dp"/>
+                <RelativeLayout
+                    android:id="@+id/customize_preview_show_coin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true">
+                    <TextView
+                        android:id="@+id/customize_preview_coin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="구천구백코인"
+                        android:textSize="7sp" />
+                </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
+        </FrameLayout>
     </FrameLayout>
     <RelativeLayout
         android:layout_width="match_parent"

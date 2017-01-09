@@ -39,11 +39,5 @@
             android:layout_height="wrap_content"
             android:text="구천구백코인"
             android:layout_alignParentRight="true" />
-        <TextView
-            android:id="@+id/shop_notice_coin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="자산 : "
-            android:layout_toLeftOf="@id/shop_coin"/>
     </RelativeLayout>
 </LinearLayout>

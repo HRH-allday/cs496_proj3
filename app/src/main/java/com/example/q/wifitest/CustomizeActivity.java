@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -42,10 +44,10 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     private ViewPager viewPager;
     private CustomizeAdapter adapter;
     private ImageView imageView;
-    private TextView textView;
     private TextView coinView;
     private RelativeLayout relativeLayout;
     private FrameLayout frameLayout;
+    private FloatingActionButton selectAllBtn;
     private Button save_btn;
     private int background_index;
     private int[] font_index = new int[numViews];
@@ -106,9 +108,55 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
             }
         });
 
-        textView = (TextView) findViewById(R.id.customize_preview_font);
+        textViews = new TextView[] {
+                (TextView) findViewById(R.id.customize_preview_ui),
+                (TextView) findViewById(R.id.customize_preview_title),
+                (TextView) findViewById(R.id.customize_preview_coin)
+        };
+
+        for (int i = 0; i < numViews; i++) {
+            final int index = i;
+            textViews[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isTextViewSelected[index]) {
+                        isTextViewSelected[index] = false;
+                        // TODO : 애니메이션 변경
+                        textViews[index].setBackgroundResource(0);
+                    } else {
+                        isTextViewSelected[index] = true;
+                        // TODO : 애니메이션 변경
+                        textViews[index].setBackgroundResource(R.drawable.text_border);
+                   }
+                }
+            });
+        }
+
+        selectAllBtn = (FloatingActionButton) findViewById(R.id.customize_select_all_btn);
+        selectAllBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < numViews; i++) {
+                    if (!isTextViewSelected[i]) {
+                        for (int j = 0; j < numViews; j++) {
+                            isTextViewSelected[j] = true;
+                            // TODO : 애니메이션
+                            textViews[j].setBackgroundResource(R.drawable.text_border);
+                        }
+                        return;
+                    }
+                }
+
+                for (int i = 0; i < numViews; i++) {
+                    isTextViewSelected[i] = false;
+                    // TODO : 애니메이션 변경
+                    textViews[i].setBackgroundResource(0);
+                }
+            }
+        });
+
         coinView = (TextView) findViewById(R.id.customize_preview_coin);
-        coinView.setText(MainActivity.coin +"원");
+        coinView.setText("자산 : "+MainActivity.coin +"원");
 
         save_btn = (Button) findViewById(R.id.customize_save_btn);
         save_btn.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +173,8 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 saveDialog.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+
+
                     }
                 });
                 saveDialog.show();
