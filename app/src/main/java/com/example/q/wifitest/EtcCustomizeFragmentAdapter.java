@@ -10,29 +10,33 @@ import android.widget.BaseAdapter;
  */
 
 public class EtcCustomizeFragmentAdapter extends FragmentPagerAdapter {
+    static final int FRAGMENT_TYPE_SIZE = 1023;
+    static final int FRAGMENT_TYPE_COLOR = 1022;
     int tabCnt;
-    private FontSizeFragment fontSizeFragment1;
-    private FontSizeFragment fontSizeFragment2;
-    private FontSizeFragment fontSizeFragment3;
+    private EtcFontFragment fontSizeFragment;
+    private EtcFontFragment fontColorFragment;
+    private IsSpacedFragment isSpacedFragment;
 
     public EtcCustomizeFragmentAdapter(FragmentManager fm, int tabCnt) {
         super(fm);
         this.tabCnt = tabCnt;
 
-        fontSizeFragment1 = new FontSizeFragment();
-        fontSizeFragment2 = new FontSizeFragment();
-        fontSizeFragment3 = new FontSizeFragment();
+        fontSizeFragment = new EtcFontFragment();
+        fontSizeFragment.setType(FRAGMENT_TYPE_SIZE);
+        fontColorFragment = new EtcFontFragment();
+        fontColorFragment.setType(FRAGMENT_TYPE_COLOR);
+        isSpacedFragment = new IsSpacedFragment();
     }
 
     @Override
     public Fragment getItem(int position) {
         switch(position) {
             case 0 :
-                return fontSizeFragment1;
+                return fontSizeFragment;
             case 1 :
-                return fontSizeFragment2;
+                return fontColorFragment;
             case 2 :
-                return fontSizeFragment3;
+                return isSpacedFragment;
             default :
                 return null;
         }
