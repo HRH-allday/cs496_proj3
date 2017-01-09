@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,14 +28,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.NoSuchElementException;
 
-
 public class MainActivity extends AppCompatActivity {
     static final int CREATED_FROM_SHOP = 109;
     static final int CREATED_FROM_CUSTOMIZE = 110;
     static final int SAVE_NEW_THEME = 111;
 
-    private Integer[] images = { R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6 };
-    private Integer[] texts = {R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
+    static final Integer[] images = { R.drawable.fucking_bonobono, R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6 };
+    static final Integer[] texts = { R.string.font0, R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
 
     private FloatingActionButton goto_shop;
     private FloatingActionButton goto_customize;
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
 
         goto_shop = (FloatingActionButton) findViewById(R.id.main_goto_shop);
         goto_customize = (FloatingActionButton) findViewById(R.id.main_goto_customize);
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         goto_game.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ClickFollower.class);
+                //Intent i = new Intent(getApplicationContext(), ClickFollower.class);
+                Intent i = new Intent(getApplicationContext(), VoiceFollower.class);
                 startActivity(i);
             }
         });
@@ -95,6 +97,14 @@ public class MainActivity extends AppCompatActivity {
         coinView = (TextView) findViewById(R.id.main_coin);
 
         new GetUserData().execute();
+    }
+
+    @Override
+    public void setContentView(int view) {
+        super.setContentView(view);
+
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/goongseo.TTF");
+        fontChanger.replaceFonts((ViewGroup) this.findViewById(android.R.id.content));
     }
 
     @Override
@@ -188,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (font_color != -1) {
-                    // set text color
+
                 }
 
                 if (font_size != -1) {
@@ -197,6 +207,12 @@ public class MainActivity extends AppCompatActivity {
 
                 if (font != -1) {
                     textView.setText(texts[font]);
+                    switch (font_color) {
+                        case 0 :
+                            FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/goongseo.TTF");
+                            fontChanger.replaceFonts((ViewGroup) findViewById(android.R.id.content));
+                            break;
+                    }
                 }
 
                 if (etc_isspaced) {

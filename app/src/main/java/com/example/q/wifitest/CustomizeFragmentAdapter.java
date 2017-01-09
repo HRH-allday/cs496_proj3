@@ -1,8 +1,5 @@
 package com.example.q.wifitest;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,20 +16,18 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by q on 2017-01-05.
  */
 
 public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFragmentAdapter.CustomViewHolder>  {
-    private Integer[] images = { R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6 };
-    private Integer[] texts = {R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
+    private Integer[] images = MainActivity.images;
+    private Integer[] texts = MainActivity.texts;
     private int from;
     private CustomizeActivity customizeActivity;
     private ArrayList<Integer> bought_items;
@@ -66,7 +61,7 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.font_item, viewGroup, false);
                 break;
             case 2 :
-                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.etc_item, viewGroup, false);
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.etc_shop_item, viewGroup, false);
                 break;
             default :
                 view = null;

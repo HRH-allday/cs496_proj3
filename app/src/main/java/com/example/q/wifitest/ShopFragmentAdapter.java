@@ -20,15 +20,16 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * Created by q on 2017-01-05.
  */
 
 public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapter.CustomViewHolder>{
-    private Integer[] images = { R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6 };
+    private Integer[] images = Arrays.copyOfRange(MainActivity.images, 1, MainActivity.images.length);
     private Integer[] imagePrices = {20, 30, 40, 50, 60, 70};
-    private Integer[] texts = {R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
+    private Integer[] texts = Arrays.copyOfRange(MainActivity.texts, 1, MainActivity.texts.length);
     private int from;
     private Context mContext;
     private BackgroundFragment bf = null;
@@ -74,7 +75,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.font_item, viewGroup, false);
                 break;
             case 2 :
-                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.etc_item, viewGroup, false);
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.etc_shop_item, viewGroup, false);
                 break;
             default :
                 view = null;
@@ -119,20 +120,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                     buyDialog.setMessage(position + 1 + "번째 아이템을 구입하시겠습니까?");
                     buyDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            //TODO : buy item
-                            money -= price;
-                            switch (job) {
-                                case 0 :
-                                    bf.onShopClickHandler(money);
-                                    break;
-                                case 1 :
-                                    ff.onShopClickHandler(money);
-                                    break;
-                                case 2 :
-                                    ef.onShopClickHandler(money);
-                                    break;
-                            }
-                            new ShopFragmentAdapter.SaveBuyInfo().execute(from, position);
+                            new ShopFragmentAdapter.SaveBuyInfo().execute(from, position, price);
                             dialog.cancel();
                         }
                     });
@@ -181,6 +169,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
             JSONObject jobject = null;
             int type = params[0];
             int position = params[1];
+            int price = params[2];
 
             try {
                 url = new URL("http://ec2-52-79-95-160.ap-northeast-2.compute.amazonaws.com:3000/buy_item");
@@ -195,7 +184,10 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 jobject = new JSONObject();
                 jobject.put("token", token);
                 jobject.put("buy_type", type);
-                jobject.put("buy_item", position);
+                if (type == 0 || type == 1)
+                    jobject.put("buy_item", position + 1);
+                else
+                    jobject.put("buy_item", position);
                 jobject.put("left_money", money);
 
                 OutputStream out_stream = conn.getOutputStream();
@@ -221,6 +213,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 in.close();
 
                 jobject = new JSONObject(response.toString());
+                jobject.put("price", price);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -247,6 +240,19 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                         }
                     });
                     buyCompleteDialog.show();
+
+                    money -= jobject.getInt("price");
+                    switch (job) {
+                        case 0 :
+                            bf.onShopClickHandler(money);
+                            break;
+                        case 1 :
+                            ff.onShopClickHandler(money);
+                            break;
+                        case 2 :
+                            ef.onShopClickHandler(money);
+                            break;
+                    }
                 } else {
                     AlertDialog.Builder alreadyBoughtDialog = new AlertDialog.Builder(mContext);
                     alreadyBoughtDialog.setTitle("Already Bought");

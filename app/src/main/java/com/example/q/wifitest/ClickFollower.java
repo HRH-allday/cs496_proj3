@@ -72,7 +72,7 @@ public class ClickFollower extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new ClickFrameAdapter(this, level, screenWidth / level, -2, false, false);
+        adapter = new ClickFrameAdapter(this, level, screenWidth / level, -2, false, 0);
         recyclerView.setAdapter(adapter);
 
         score = 0;
@@ -99,7 +99,7 @@ public class ClickFollower extends AppCompatActivity {
 
 
             for (int i = 0; i < level*level; i++) {
-                adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, btnOrder.get(i), false, false);
+                adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, btnOrder.get(i), false, 0);
                 publishProgress();
                 try {
                     Thread.sleep(300);
@@ -108,7 +108,7 @@ public class ClickFollower extends AppCompatActivity {
                 }
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, 0);
             publishProgress();
             try {
                 Thread.sleep(300);
@@ -116,7 +116,7 @@ public class ClickFollower extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -1, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -1, false, 0);
             publishProgress();
             try {
                 Thread.sleep(800);
@@ -124,7 +124,7 @@ public class ClickFollower extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, true, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, true, 0);
             publishProgress();
             return null;
         }
@@ -149,7 +149,7 @@ public class ClickFollower extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -1, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -1, false, 1);
             publishProgress();
             try {
                 Thread.sleep(600);
@@ -157,7 +157,7 @@ public class ClickFollower extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, 0);
             publishProgress();
             try {
                 Thread.sleep(600);
@@ -165,7 +165,7 @@ public class ClickFollower extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -1, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -1, false, 1);
             publishProgress();
             try {
                 Thread.sleep(600);
@@ -173,7 +173,7 @@ public class ClickFollower extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, 0);
             publishProgress();
             try {
                 Thread.sleep(1000);
@@ -199,7 +199,7 @@ public class ClickFollower extends AppCompatActivity {
             }
             layoutManager = new GridLayoutManager(getApplicationContext(), level);
             recyclerView.setLayoutManager(layoutManager);
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, false);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, -2, false, 0);
             recyclerView.setAdapter(adapter);
         }
     }
@@ -207,7 +207,7 @@ public class ClickFollower extends AppCompatActivity {
     private class GameOver extends AsyncTask<Integer, Void, Void> {
         @Override
         public Void doInBackground(Integer... params) {
-            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, params[0], false, true);
+            adapter = new ClickFrameAdapter(ClickFollower.this, level, screenWidth / level, params[0], false, 2);
             publishProgress();
             try {
                 Thread.sleep(2000);

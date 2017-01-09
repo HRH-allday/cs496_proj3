@@ -12,7 +12,7 @@ public class CustomizeAdapter extends FragmentPagerAdapter {
     int tabCnt;
     private BackgroundFragment backgroundFragment;
     private FontFragment fontFragment;
-    private EtcFragment etcFragment;
+    private EtcCustomizeFragment etcCustomizeFragment;
 
     public CustomizeAdapter(FragmentManager fm, int tabCnt) {
         super(fm);
@@ -22,8 +22,7 @@ public class CustomizeAdapter extends FragmentPagerAdapter {
         backgroundFragment.setFrom(MainActivity.CREATED_FROM_CUSTOMIZE);
         fontFragment = new FontFragment();
         fontFragment.setFrom(MainActivity.CREATED_FROM_CUSTOMIZE);
-        etcFragment = new EtcFragment();
-        etcFragment.setFrom(MainActivity.CREATED_FROM_CUSTOMIZE);
+        etcCustomizeFragment = new EtcCustomizeFragment();
     }
 
     @Override
@@ -34,7 +33,7 @@ public class CustomizeAdapter extends FragmentPagerAdapter {
             case 1 :
                 return fontFragment;
             case 2 :
-                return etcFragment;
+                return etcCustomizeFragment;
             default :
                 return null;
         }

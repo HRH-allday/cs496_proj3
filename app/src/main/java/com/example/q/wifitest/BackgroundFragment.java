@@ -37,9 +37,9 @@ public class BackgroundFragment extends Fragment {
         backgroundList.setLayoutManager(layoutManager);
 
         if (from == MainActivity.CREATED_FROM_SHOP)
-            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 0, this);
+            adapter = new ShopFragmentAdapter(getContext(), 0, this);
         else if (from == MainActivity.CREATED_FROM_CUSTOMIZE)
-            adapter = (RecyclerView.Adapter) new CustomizeFragmentAdapter((CustomizeActivity)getActivity(), 0);
+            adapter = new CustomizeFragmentAdapter((CustomizeActivity)getActivity(), 0);
         backgroundList.setAdapter(adapter);
 
         return view;

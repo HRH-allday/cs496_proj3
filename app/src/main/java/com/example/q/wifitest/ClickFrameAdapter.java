@@ -24,16 +24,16 @@ public class ClickFrameAdapter extends RecyclerView.Adapter<ClickFrameAdapter.Cu
     private int sideLength;
     private int bright_btn;
     private boolean clickable;
-    private boolean gameOver;
+    private int gameState;
     private int clickNum;
 
-    public ClickFrameAdapter(ClickFollower clickFollower, int level, int sideLength, int bright_btn, boolean clickable, boolean gameOver) {
+    public ClickFrameAdapter(ClickFollower clickFollower, int level, int sideLength, int bright_btn, boolean clickable, int gameState) {
         this.level = level;
         this.sideLength = sideLength;
         this.bright_btn = bright_btn;
         this.clickable = clickable;
         this.clickFollower = clickFollower;
-        this.gameOver = gameOver;
+        this.gameState = gameState;
         clickNum = 0;
     }
 
@@ -62,8 +62,12 @@ public class ClickFrameAdapter extends RecyclerView.Adapter<ClickFrameAdapter.Cu
         params.width = sideLength;
         params.height = sideLength;
         holder.itemView.setLayoutParams(params);
-        if (gameOver)
+        if (bright_btn == -2)
+            holder.imageView.setImageResource(R.drawable.square_button);
+        else if (gameState == 2)
             holder.imageView.setImageResource(R.drawable.square_button_gameover);
+        else if (gameState == 1)
+            holder.imageView.setImageResource(R.drawable.square_button_success);
         else if (bright_btn == -1 || bright_btn == position)
             holder.imageView.setImageResource(R.drawable.square_button_bright);
         else
