@@ -24,6 +24,7 @@ public class IsSpacedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO : 클릭하면 스페이스바 된 상태 <-> 스페이스바 되지 않은 상태 변경
+                ((CustomizeActivity)getActivity()).setPreviewSpace();
             }
         });
 

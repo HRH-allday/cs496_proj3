@@ -2,7 +2,9 @@ package com.example.q.wifitest;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -28,6 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.NoSuchElementException;
 
+import static com.example.q.wifitest.CustomizeActivity.numViews;
+
 public class MainActivity extends AppCompatActivity {
     static final int CREATED_FROM_SHOP = 109;
     static final int CREATED_FROM_CUSTOMIZE = 110;
@@ -35,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
     static final Integer[] images = { R.drawable.fucking_bonobono, R.drawable.bg1, R.drawable.bg2, R.drawable.bg3, R.drawable.bg4, R.drawable.bg5, R.drawable.bg6 };
     static final Integer[] texts = { R.string.font0, R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
+    static final String[] fontNames = { "fonts/goongseo.TTF" };
+    static final Integer[] spacedTexts = {R.string.text_spaced0, R.string.text_spaced1, R.string.text_spaced2};
+    static final Integer[] unspacedTexts = {R.string.text_unspaced0, R.string.text_unspaced1, R.string.text_unspaced2};
+
+
+    private TextView[] textViews = new TextView[numViews];
 
     private FloatingActionButton goto_shop;
     private FloatingActionButton goto_customize;
@@ -180,12 +192,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(JSONObject jobject) {
             try {
+                Log.i("how is it", jobject.toString());
                 boolean background_isdefault = jobject.getBoolean("background_isdefault");
                 String background_value = jobject.getString("background_value");
-                int font_color = jobject.getInt("font_color");
-                int font_size = jobject.getInt("font_size");
-                int font = jobject.getInt("font");
-                boolean etc_isspaced = jobject.getBoolean("etc_isspaced");
+                JSONArray font_color = jobject.getJSONArray("font_color");
+                JSONArray font_size = jobject.getJSONArray("font_size");
+                JSONArray font = jobject.getJSONArray("font");
+                JSONArray etc_isspaced = jobject.getJSONArray("etc_isspaced");
                 coin = jobject.getInt("coin");
 
 
@@ -196,30 +209,27 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // set background by image
                 }
+                for (int i = 0; i < font_color.length(); i++) {
+                    String colorCode = font_color.getString(i);
+                    int size = font_size.getInt(i);
+                    int font_ind = font.getInt(i);
+                    boolean spaced = etc_isspaced.getBoolean(i);
+                    if (!colorCode.equals("-1")) {
+                        textViews[i].setTextColor(Color.parseColor(colorCode));
 
-                if (font_color != -1) {
-
-                }
-
-                if (font_size != -1) {
-                    // set text size
-                }
-
-                if (font != -1) {
-                    textView.setText(texts[font]);
-                    switch (font_color) {
-                        case 0 :
-                            FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(), "fonts/goongseo.TTF");
-                            fontChanger.replaceFonts((ViewGroup) findViewById(android.R.id.content));
-                            break;
                     }
+                    if (size != -1) {
+                        textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+                    }
+                    textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[font_ind]));
+                    if (spaced) {
+                        textViews[i].setText(unspacedTexts[i]);
+                    }else{
+                        textViews[i].setText(spacedTexts[i]);
+                    }
+
                 }
 
-                if (etc_isspaced) {
-                    // set text spaced
-                } else {
-                    // set text nonspaced
-                }
                 if (coin != -1) {
                     // set coin
                     coinView.setText(""+coin+"원");

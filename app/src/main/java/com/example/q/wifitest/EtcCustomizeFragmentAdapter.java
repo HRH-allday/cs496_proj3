@@ -3,7 +3,6 @@ package com.example.q.wifitest;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.widget.BaseAdapter;
 
 /**
  * Created by q on 2017-01-09.
@@ -16,10 +15,12 @@ public class EtcCustomizeFragmentAdapter extends FragmentPagerAdapter {
     private EtcFontFragment fontSizeFragment;
     private EtcFontFragment fontColorFragment;
     private IsSpacedFragment isSpacedFragment;
+    private CustomizeActivity customizeActivity;
 
-    public EtcCustomizeFragmentAdapter(FragmentManager fm, int tabCnt) {
+    public EtcCustomizeFragmentAdapter(CustomizeActivity ca, FragmentManager fm, int tabCnt) {
         super(fm);
         this.tabCnt = tabCnt;
+        this.customizeActivity = ca;
 
         fontSizeFragment = new EtcFontFragment();
         fontSizeFragment.setType(FRAGMENT_TYPE_SIZE);

@@ -19,6 +19,7 @@ public class EtcFontFragment extends Fragment {
     Button button;
     int type;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.etc_font_fragment, container, false);
@@ -28,12 +29,13 @@ public class EtcFontFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inputStr = editText.getText().toString();
+                String inputStr = editText.getText().toString().trim();
                 switch (type) {
                     case EtcCustomizeFragmentAdapter.FRAGMENT_TYPE_SIZE :
                         if (isInteger(inputStr, 10)) {
                             editText.setText("");
                             //TODO : 폰트 크기 변경
+                            ((CustomizeActivity)getActivity()).setPreviewTextSize(Integer.parseInt(inputStr));
                         } else {
                             Toast.makeText(getActivity(), "숫자만 입력 가능합니다", Toast.LENGTH_SHORT).show();
                         }
@@ -42,6 +44,7 @@ public class EtcFontFragment extends Fragment {
                         if (isInteger(inputStr, 16) && inputStr.length() == 6) {
                             editText.setText("");
                             //TODO : 폰트 색깔 변경
+                            ((CustomizeActivity)getActivity()).setPreviewTextColor(inputStr);
                         } else {
                             Toast.makeText(getActivity(), "6자리의 16진수를 입력해주세요", Toast.LENGTH_SHORT).show();
                         }

@@ -8,6 +8,14 @@
     <string name="font4">font 4</string>
     <string name="font5">font 5</string>
     <string name="font6">font 6</string>
+    <string name="text_spaced0">이것이 지금 당신의 UI.</string>
+    <string name="text_unspaced0">이것이지금당신의UI.</string>
+    <string name="text_spaced1">\" 고조선 \"</string>
+    <string name="text_unspaced1">\"고조선\"</string>
+    <string name="text_spaced2">자산 : </string>
+    <string name="text_unspaced2">자산:</string>
+
+
     <string name="hard_sentence1">앞집 안방 장판은 노란꽃 장판이고 뒷집 안방 장판은 빨간꽃 장판이다</string>
     <string name="hard_sentence2">내가 그린 구름 그림은 새털 구름 그린 그림이고 네가 그린 구름 그림은 솜털 구름 그린 그림이다</string>
     <string name="hard_sentence3">박범복군은 밤 벚꽃놀이를 가고 방범복양은 낮 벚꽃놀이를 간다</string>

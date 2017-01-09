@@ -3,12 +3,15 @@ package com.example.q.wifitest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +48,19 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     private FrameLayout frameLayout;
     private Button save_btn;
     private int background_index;
-    private int font_index;
-    private int etc_index;
-    private TextView[] textViews = new TextView[4];
-    private boolean[] isTextViewSelected = { false, false, false, false };
+    private int[] font_index = new int[numViews];
+    private String[] color_index = new String[numViews];
+    private int[] size_index = new int[numViews];
+    private boolean[] space_index = new boolean[numViews];
+    private TextView[] textViews = new TextView[numViews];
+    private boolean[] isTextViewSelected = { false, false, false };
+    static final Integer[] texts = { R.string.font0, R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
+    static final String[] fontNames = { "fonts/goongseo.TTF" };
+    static final Integer[] spacedTexts = {R.string.text_spaced0, R.string.text_spaced1, R.string.text_spaced2};
+    static final Integer[] unspacedTexts = {R.string.text_unspaced0, R.string.text_unspaced1, R.string.text_unspaced2};
+    static final int numViews = 3;
+
+
 
 
     @Override
@@ -119,9 +131,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
             }
         });
 
-        background_index = -1;
-        font_index = -1;
-        etc_index = -1;
     }
 
     @Override
@@ -151,12 +160,48 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     }
 
     public void setPreviewFont(int id, int index) {
-        textView.setText(id);
-        font_index = index;
+        for(int i = 0 ; i < numViews ; i++){
+            if(isTextViewSelected[i]) {
+                textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[id]));
+                isTextViewSelected[i] = false;
+                font_index[i] = index;
+            }
+        }
     }
 
-    public void setPreviewEtc(int id, int index) {
-        etc_index = index;
+    public void setPreviewTextColor(String colorCode) {
+        for(int i = 0 ; i < numViews ; i++){
+            if(isTextViewSelected[i]) {
+                textViews[i].setTextColor(Color.parseColor("#"+colorCode));
+                isTextViewSelected[i] = false;
+                color_index[i] = "#"+colorCode;
+            }
+        }
+    }
+
+    public void setPreviewTextSize(int size) {
+        for(int i = 0 ; i < numViews ; i++){
+            if(isTextViewSelected[i]) {
+                textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+                isTextViewSelected[i] = false;
+                size_index[i] = size;
+            }
+        }
+    }
+
+    public void setPreviewSpace(){
+        for(int i = 0 ; i < numViews ; i++){
+            if(isTextViewSelected[i]) {
+                if(space_index[i]) {
+                    textViews[i].setText(unspacedTexts[i]);
+                    space_index[i] = false;
+                }else{
+                    textViews[i].setText(spacedTexts[i]);
+                    space_index[i] = true;
+                }
+                isTextViewSelected[i] = false;
+            }
+        }
     }
 
     private class SaveCustomizedUI extends AsyncTask<Void, Void, JSONObject> {
@@ -180,6 +225,9 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 jobject.put("token", token);
                 jobject.put("background_index", background_index);
                 jobject.put("font_index", font_index);
+                jobject.put("color_index", color_index);
+                jobject.put("size_index", size_index);
+                jobject.put("space_index", space_index);
                 //jobject.put("etc_index", etc_index);
 
                 OutputStream out_stream = conn.getOutputStream();

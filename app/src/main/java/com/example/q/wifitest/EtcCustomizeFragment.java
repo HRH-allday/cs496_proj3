@@ -4,12 +4,9 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 /**
  * Created by q on 2017-01-09.
@@ -34,7 +31,7 @@ public class EtcCustomizeFragment extends Fragment implements TabLayout.OnTabSel
 
         viewPager = (ViewPager) view.findViewById(R.id.etc_customize_viewpager);
 
-        adapter = new EtcCustomizeFragmentAdapter(getFragmentManager(), tabLayout.getTabCount());
+        adapter = new EtcCustomizeFragmentAdapter((CustomizeActivity)getActivity(), getFragmentManager(), tabLayout.getTabCount());
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

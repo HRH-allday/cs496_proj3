@@ -96,8 +96,7 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
                     case 1:
                         customizeActivity.setPreviewFont(texts[i], i);
                         break;
-                    case 2:
-                        customizeActivity.setPreviewEtc(texts[i], i);
+                    default:
                         break;
                 }
                 }
