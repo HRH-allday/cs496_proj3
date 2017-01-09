@@ -47,6 +47,9 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     private int background_index;
     private int font_index;
     private int etc_index;
+    private TextView[] textViews = new TextView[4];
+    private boolean[] isTextViewSelected = { false, false, false, false };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
