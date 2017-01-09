@@ -62,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        textViews = new TextView[] {
+                (TextView) findViewById(R.id.main_ui),
+                (TextView) findViewById(R.id.main_title),
+                (TextView) findViewById(R.id.main_coin)
+        };
+
 
         goto_shop = (FloatingActionButton) findViewById(R.id.main_goto_shop);
         goto_customize = (FloatingActionButton) findViewById(R.id.main_goto_customize);
