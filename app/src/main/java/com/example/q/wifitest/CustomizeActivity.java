@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -279,11 +280,30 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 jobject = new JSONObject();
                 jobject.put("token", token);
                 jobject.put("background_index", background_index);
-                jobject.put("font_index", font_index);
-                jobject.put("color_index", color_index);
-                jobject.put("size_index", size_index);
-                jobject.put("space_index", space_index);
-                //jobject.put("etc_index", etc_index);
+                JSONArray font_jarr = new JSONArray();
+                for(int i = 0; i < numViews ; i++){
+                    font_jarr.put(font_index[i]);
+                }
+                jobject.put("font_index", font_jarr);
+
+                JSONArray color_jarr = new JSONArray();
+                for(int i = 0; i < numViews ; i++){
+                    color_jarr.put(color_index[i]);
+                }
+                jobject.put("color_index", color_jarr);
+
+                JSONArray size_jarr = new JSONArray();
+                for(int i = 0; i < numViews ; i++){
+                    size_jarr.put(size_index[i]);
+                }
+                jobject.put("size_index", size_jarr);
+
+                JSONArray space_jarr = new JSONArray();
+                for(int i = 0; i < numViews ; i++){
+                    space_jarr.put(space_index[i]);
+                }
+                jobject.put("space_index", space_jarr);
+
 
                 OutputStream out_stream = conn.getOutputStream();
 
