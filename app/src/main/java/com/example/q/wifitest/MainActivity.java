@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static com.example.q.wifitest.CustomizeActivity.numViews;
@@ -44,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
     static final String[] fontNames = { "fonts/goongseo.TTF" };
     static final Integer[] spacedTexts = {R.string.text_spaced0, R.string.text_spaced1, R.string.text_spaced2};
     static final Integer[] unspacedTexts = {R.string.text_unspaced0, R.string.text_unspaced1, R.string.text_unspaced2};
+
+    boolean current_background_isdefault;
+    String current_background_value;
+    ArrayList<String> current_font_color;
+    ArrayList<Integer> current_font_size;
+    ArrayList<Integer> current_font;
+    ArrayList<Boolean> current_etc_isspaced;
 
 
     private TextView[] textViews = new TextView[numViews];
@@ -87,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CustomizeActivity.class);
+                i.putExtra("background_isdefault", current_background_value);
+                i.putExtra("background_value", current_background_value);
+                i.putExtra("font", current_font.toArray());
+                i.putExtra("font_size", current_font_size.toArray());
+                i.putExtra("font_color", current_font_color.toArray());
+                i.putExtra("etc_isspaced", current_etc_isspaced.toArray());
                 startActivityForResult(i, SAVE_NEW_THEME);
                 overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
             }
@@ -206,6 +220,13 @@ public class MainActivity extends AppCompatActivity {
                 JSONArray font_size = jobject.getJSONArray("font_size");
                 JSONArray font = jobject.getJSONArray("font");
                 JSONArray etc_isspaced = jobject.getJSONArray("etc_isspaced");
+
+                current_font = new ArrayList<>();
+                current_font_color = new ArrayList<>();
+                current_font_size = new ArrayList<>();
+                current_etc_isspaced = new ArrayList<>();
+                current_background_isdefault = background_isdefault;
+                current_background_value = background_value;
                 coin = jobject.getInt("coin");
 
 
@@ -217,6 +238,11 @@ public class MainActivity extends AppCompatActivity {
                     // set background by image
                 }
                 for (int i = 0; i < font_color.length(); i++) {
+                    current_font.add(font.getInt(i));
+                    current_font_color.add(font_color.getString(i));
+                    current_font_size.add(font_size.getInt(i));
+                    current_etc_isspaced.add(etc_isspaced.getBoolean(i));
+
                     String colorCode = font_color.getString(i);
                     int size = font_size.getInt(i);
                     int font_ind = font.getInt(i);
