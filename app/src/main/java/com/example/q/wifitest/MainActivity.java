@@ -221,11 +221,10 @@ public class MainActivity extends AppCompatActivity {
                     int size = font_size.getInt(i);
                     int font_ind = font.getInt(i);
                     boolean spaced = etc_isspaced.getBoolean(i);
-                    if (!colorCode.equals("null")) {
+                    Log.i("colorcode", colorCode);
+                    if (!colorCode.equals("-1")) {
                         textViews[i].setTextColor(Color.parseColor(colorCode));
 
-                    }else{
-                        textViews[i].setTextColor(Color.parseColor("#000000"));
                     }
                     if (size != -1) {
                         textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size);

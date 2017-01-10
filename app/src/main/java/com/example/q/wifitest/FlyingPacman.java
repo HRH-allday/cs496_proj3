@@ -241,11 +241,13 @@ public class FlyingPacman extends AppCompatActivity {
             int blackCenterX = blackX[i] + black[i].getWidth() / 2;
             int blackCenterY = blackY[i] + black[i].getHeight() / 2;
             if(0 <= blackCenterX && blackCenterX <= boxSize && boxY <= blackCenterY && blackCenterY <= boxSize + boxY){
+                timer.cancel();
                 timer = null;
 
                 Intent intent = new Intent(getApplicationContext(), GameResultPacman.class);
                 intent.putExtra("score", score);
                 startActivity(intent);
+                finish();
 
             }
         }

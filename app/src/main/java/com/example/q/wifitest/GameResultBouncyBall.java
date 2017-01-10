@@ -37,6 +37,7 @@ public class GameResultBouncyBall extends Activity {
                     switch(from){
                         case 1:
                             startActivity(new Intent(getApplicationContext(), BouncyBallStage2.class));
+                            finish();
                             break;
                         case 2:
                             try {
@@ -49,6 +50,7 @@ public class GameResultBouncyBall extends Activity {
                                 e.printStackTrace();
                             }
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                             break;
                         default:
                             break;
@@ -64,6 +66,7 @@ public class GameResultBouncyBall extends Activity {
                     switch (from) {
                         case 1:
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                             break;
                         case 2:
                             try {
@@ -76,6 +79,7 @@ public class GameResultBouncyBall extends Activity {
                                 e.printStackTrace();
                             }
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            finish();
                             break;
                         default:
                             break;

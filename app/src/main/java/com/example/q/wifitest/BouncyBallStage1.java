@@ -126,11 +126,14 @@ public class BouncyBallStage1 extends AppCompatActivity {
             redyX = 150;
             redy.setY(groundY - height);
             redyY = groundY - height;
+            timer.cancel();
+            timer = null;
             timer2.cancel();
             Intent intent = new Intent(getApplicationContext(), GameResultBouncyBall.class);
             intent.putExtra("success", 1);
             intent.putExtra("from",1);
             startActivity(intent);
+            finish();
 
         }
 
@@ -237,11 +240,13 @@ public class BouncyBallStage1 extends AppCompatActivity {
                 }
 
                 public void onFinish() {
+                    timer.cancel();
+                    timer = null;
                     Intent intent = new Intent(getApplicationContext(), GameResultBouncyBall.class);
                     intent.putExtra("success", 0);
                     intent.putExtra("from", 1);
                     startActivity(intent);
-                    timerText.setText("done!");
+                    finish();
                 }
             }.start();
 

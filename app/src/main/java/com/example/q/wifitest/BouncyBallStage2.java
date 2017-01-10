@@ -125,11 +125,14 @@ public class BouncyBallStage2 extends Activity {
             redyX = 150;
             redy.setY(groundY - height);
             redyY = groundY - height;
+            timer.cancel();
+            timer = null;
             timer2.cancel();
             Intent intent = new Intent(getApplicationContext(), GameResultBouncyBall.class);
             intent.putExtra("success", 1);
             intent.putExtra("from", 2);
             startActivity(intent);
+            finish();
 
         }
         if(blockinfo[1][0] < 150){
@@ -196,11 +199,14 @@ public class BouncyBallStage2 extends Activity {
             redyprevY = redyY;
             heart--;
             if(heart <= 0) {
+                timer.cancel();
+                timer = null;
                 timer2.cancel();
                 Intent intent = new Intent(getApplicationContext(), GameResultBouncyBall.class);
                 intent.putExtra("success", 0);
                 intent.putExtra("from", 2);
                 startActivity(intent);
+                finish();
             }
         }
         else {
@@ -266,10 +272,13 @@ public class BouncyBallStage2 extends Activity {
                 }
 
                 public void onFinish() {
+                    timer.cancel();
+                    timer = null;
                     Intent intent = new Intent(getApplicationContext(), GameResultBouncyBall.class);
                     intent.putExtra("success", 0);
                     intent.putExtra("from", 2);
                     startActivity(intent);
+                    finish();
                     timerText.setText("done!");
                 }
             }.start();

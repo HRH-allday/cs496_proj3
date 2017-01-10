@@ -46,7 +46,7 @@ public class BackgroundFragment extends Fragment {
     }
     public void onShopClickHandler(int coinLeft){
         TextView coinView = (TextView) getActivity().findViewById(R.id.shop_coin);
-        coinView.setText(coinLeft+"원");
+        coinView.setText("자산 : "+coinLeft+"원");
     }
 
 
