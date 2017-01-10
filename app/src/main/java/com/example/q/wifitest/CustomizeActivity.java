@@ -109,6 +109,10 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 params.width = (int)(((float) screenWidth / screenHeight) * imageHeight);
 
                 frameLayout.setLayoutParams(params);
+
+                Log.i("Test", "width = " + params.width);
+                Log.i("Test", "height = " + frameLayout.getHeight());
+                initializePreviewUI(params.width, frameLayout.getHeight());
             }
         });
 
@@ -178,21 +182,14 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 saveDialog.show();
             }
         });
-
-        initializePreviewUI();
     }
 
-    private void initializePreviewUI() {
+    private void initializePreviewUI(int width, int height) {
         Intent intent = getIntent();
 
         background_index = Integer.parseInt(intent.getExtras().getString("background_value"));
         imageView.setImageResource(MainActivity.images[background_index]);
-        imageView.post(new Runnable() {
-            @Override
-            public void run() {
-                scaleImage(imageView);
-            }
-        });
+        scaleImage(imageView, width, height);
 
         font_index = Arrays.copyOf(intent.getExtras().getIntegerArrayList("font").toArray(),
                 intent.getExtras().getIntegerArrayList("font").toArray().length,
@@ -232,8 +229,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                     textViews[i].setText(unspacedTexts[i]);
             }
         }
-
-
     }
 
     @Override
@@ -289,7 +284,7 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     public void setPreviewTextSize(int size) {
         for(int i = 0 ; i < numViews ; i++){
             if(isTextViewSelected[i]) {
-                textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+                textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, ((float)size * 5 / 8));
                 size_index[i] = size;
             }
         }
@@ -435,6 +430,58 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
 
         int boundingWidth = view.getWidth();
         int boundingHeight = view.getHeight();
+        Log.i("Test", "original width = " + Integer.toString(width));
+        Log.i("Test", "original height = " + Integer.toString(height));
+        Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));
+        Log.i("Test", "bounding height = " + Integer.toString(boundingHeight));
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) boundingWidth) / width;
+        float yScale = ((float) boundingHeight) / height;
+        Log.i("Test", "xScale = " + Float.toString(xScale));
+        Log.i("Test", "yScale = " + Float.toString(yScale));
+
+        Bitmap scaledBitmap;
+        if (xScale > yScale) {
+            int newHeight = (int) (boundingHeight / xScale);
+            Log.i("Test", "new height = " + newHeight);
+            scaledBitmap = Bitmap.createBitmap(bitmap, 0, (height - newHeight) / 2 , width, newHeight, new Matrix(), true);
+        } else {
+            int newWidth = (int) (boundingWidth / yScale);
+            Log.i("Test", "new width = " + newWidth);
+            scaledBitmap = Bitmap.createBitmap(bitmap, (width - newWidth) / 2, 0, newWidth, height, new Matrix(), true);
+        }
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        width = scaledBitmap.getWidth(); // re-use
+        height = scaledBitmap.getHeight(); // re-use
+        Log.i("Test", "scaled width = " + Integer.toString(width));
+        Log.i("Test", "scaled height = " + Integer.toString(height));
+
+        // Apply the scaled bitmap
+        view.setImageBitmap(scaledBitmap);
+    }
+
+    private void scaleImage(ImageView view, int boundingWidth, int boundingHeight) throws NoSuchElementException {
+        // Get bitmap from the the ImageView.
+        Bitmap bitmap = null;
+
+        Drawable drawing = view.getDrawable();
+        bitmap = ((BitmapDrawable) drawing).getBitmap();
+
+        // Get current dimensions AND the desired bounding box
+        int width = 0;
+        int height = 0;
+
+        try {
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException("Can't find bitmap on given view/drawable");
+        }
+
         Log.i("Test", "original width = " + Integer.toString(width));
         Log.i("Test", "original height = " + Integer.toString(height));
         Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));

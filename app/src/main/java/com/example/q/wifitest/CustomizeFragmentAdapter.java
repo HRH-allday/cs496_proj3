@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -82,12 +83,30 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
         switch (from) {
             case 0 :
                 customViewHolder.imageView.setImageResource(images[i]);
+                /*
+                LinearLayout.LayoutParams imageViewParams = (LinearLayout.LayoutParams) customViewHolder.imageView.getLayoutParams();
+
+                imageViewParams.width = (int)(((float) 1440 / 2560) * customViewHolder.itemView.getHeight());
+                imageViewParams.height = customViewHolder.itemView.getHeight();
+
+                customViewHolder.imageView.setLayoutParams(imageViewParams);
+
+                scaleImage(customViewHolder.imageView, imageViewParams.width, imageViewParams.height);
+                */
                 customViewHolder.imageView.post(new Runnable() {
                     @Override
                     public void run() {
-                        scaleImage(customViewHolder.imageView);
+                        LinearLayout.LayoutParams imageViewParams = (LinearLayout.LayoutParams) customViewHolder.imageView.getLayoutParams();
+
+                        imageViewParams.width = (int)(((float) 1440 / 2560) * customViewHolder.itemView.getHeight());
+                        imageViewParams.height = customViewHolder.itemView.getHeight();
+
+                        customViewHolder.imageView.setLayoutParams(imageViewParams);
+
+                        scaleImage(customViewHolder.imageView, imageViewParams.width, imageViewParams.height);
                     }
                 });
+
                 break;
             case 1 :
                 customViewHolder.textView.setText(texts[i]);
@@ -209,7 +228,7 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
         }
     }
 
-    private void scaleImage(ImageView view) throws NoSuchElementException {
+    private void scaleImage(ImageView view, int boundingWidth, int boundingHeight) throws NoSuchElementException {
         // Get bitmap from the the ImageView.
         Bitmap bitmap = null;
 
@@ -227,8 +246,6 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
             throw new NoSuchElementException("Can't find bitmap on given view/drawable");
         }
 
-        int boundingWidth = view.getWidth();
-        int boundingHeight = view.getHeight();
         Log.i("Test", "original width = " + Integer.toString(width));
         Log.i("Test", "original height = " + Integer.toString(height));
         Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));

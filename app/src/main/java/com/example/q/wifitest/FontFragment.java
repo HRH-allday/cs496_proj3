@@ -23,16 +23,21 @@ public class FontFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.items_fragment, null);
+        View view;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        backgroundList = (RecyclerView) view.findViewById(R.id.items_recyclerview);
-        backgroundList.setLayoutManager(layoutManager);
+        if (from == MainActivity.CREATED_FROM_SHOP) {
+            view = inflater.inflate(R.layout.shop_items_fragment, null);
+            backgroundList = (RecyclerView) view.findViewById(R.id.shop_items_recyclerview);
+            adapter = new ShopFragmentAdapter(getContext(), 1, this);
+        } else if (from == MainActivity.CREATED_FROM_CUSTOMIZE) {
+            view = inflater.inflate(R.layout.customize_items_fragment, null);
+            backgroundList = (RecyclerView) view.findViewById(R.id.customize_items_recyclerview);
+            adapter = new CustomizeFragmentAdapter((CustomizeActivity) getActivity(), 1);
+        } else
+            view = null;
 
-        if (from == MainActivity.CREATED_FROM_SHOP)
-            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 1, this, (ShopActivity) getActivity());
-        else if (from == MainActivity.CREATED_FROM_CUSTOMIZE)
-            adapter = (RecyclerView.Adapter) new CustomizeFragmentAdapter((CustomizeActivity)getActivity(), 1);
+        backgroundList.setLayoutManager(layoutManager);
         backgroundList.setAdapter(adapter);
 
         return view;

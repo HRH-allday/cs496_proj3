@@ -47,7 +47,6 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
     private BackgroundFragment bf = null;
     private FontFragment ff = null;
     private EtcFragment ef = null;
-    private ShopActivity shopActivity;
     private int job;
 
 
@@ -55,26 +54,23 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
         mContext = context;
         this.from = from;
     }
-    public ShopFragmentAdapter(Context context, int from, BackgroundFragment backgroundFragment, ShopActivity shopActivity) {
+    public ShopFragmentAdapter(Context context, int from, BackgroundFragment backgroundFragment) {
         mContext = context;
         this.from = from;
         this.bf = backgroundFragment;
         this.job = 0;
-        this.shopActivity = shopActivity;
     }
-    public ShopFragmentAdapter(Context context, int from, FontFragment fontFragment, ShopActivity shopActivity) {
+    public ShopFragmentAdapter(Context context, int from, FontFragment fontFragment) {
         mContext = context;
         this.from = from;
         this.ff = fontFragment;
         this.job = 1;
-        this.shopActivity = shopActivity;
     }
-    public ShopFragmentAdapter(Context context, int from, EtcFragment etcFragment, ShopActivity shopActivity) {
+    public ShopFragmentAdapter(Context context, int from, EtcFragment etcFragment) {
         mContext = context;
         this.from = from;
         this.ef = etcFragment;
         this.job = 2;
-        this.shopActivity = shopActivity;
     }
 
     @Override
@@ -106,12 +102,6 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 customViewHolder.imageView.post(new Runnable() {
                     @Override
                     public void run() {
-                        Display display = shopActivity.getWindowManager().getDefaultDisplay();
-                        Point size = new Point();
-                        display.getSize(size);
-                        int screenWidth = size.x;
-                        int screenHeight = size.y;
-
                         int imageHeight = customViewHolder.imageView.getHeight();
 
                         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) customViewHolder.imageView.getLayoutParams();
