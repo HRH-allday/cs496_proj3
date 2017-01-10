@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.Voice;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Intent i = new Intent(getApplicationContext(), ClickFollower.class);
-                Intent i = new Intent(getApplicationContext(),  BouncyBallStage1.class);
+                Intent i = new Intent(getApplicationContext(), VoiceFollower.class);
                 startActivity(i);
             }
         });
@@ -224,8 +226,8 @@ public class MainActivity extends AppCompatActivity {
 
                 if (background_isdefault) {
                     int background_index = Integer.parseInt(background_value);
-                    if (background_index != -1)
-                        imageView.setImageResource(images[background_index]);
+                    imageView.setImageResource(images[background_index]);
+                    scaleImage(imageView);
                 } else {
                     // set background by image
                 }
@@ -271,55 +273,48 @@ public class MainActivity extends AppCompatActivity {
 
         // Get current dimensions AND the desired bounding box
         int width = 0;
+        int height = 0;
 
         try {
             width = bitmap.getWidth();
+            height = bitmap.getHeight();
         } catch (NullPointerException e) {
             throw new NoSuchElementException("Can't find bitmap on given view/drawable");
         }
 
-        int height = bitmap.getHeight();
-        int bounding = dpToPx(250);
+        int boundingWidth = view.getWidth();
+        int boundingHeight = view.getHeight();
         Log.i("Test", "original width = " + Integer.toString(width));
         Log.i("Test", "original height = " + Integer.toString(height));
-        Log.i("Test", "bounding = " + Integer.toString(bounding));
+        Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));
+        Log.i("Test", "bounding height = " + Integer.toString(boundingHeight));
 
         // Determine how much to scale: the dimension requiring less scaling is
         // closer to the its side. This way the image always stays inside your
         // bounding box AND either x/y axis touches it.
-        float xScale = ((float) bounding) / width;
-        float yScale = ((float) bounding) / height;
-        float scale = (xScale <= yScale) ? xScale : yScale;
+        float xScale = ((float) boundingWidth) / width;
+        float yScale = ((float) boundingHeight) / height;
         Log.i("Test", "xScale = " + Float.toString(xScale));
         Log.i("Test", "yScale = " + Float.toString(yScale));
-        Log.i("Test", "scale = " + Float.toString(scale));
 
-        // Create a matrix for the scaling and add the scaling data
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
+        Bitmap scaledBitmap;
+        if (xScale > yScale) {
+            int newHeight = (int) (boundingHeight / xScale);
+            Log.i("Test", "new height = " + newHeight);
+            scaledBitmap = Bitmap.createBitmap(bitmap, 0, (height - newHeight) / 2 , width, newHeight, new Matrix(), true);
+        } else {
+            int newWidth = (int) (boundingWidth / yScale);
+            Log.i("Test", "new width = " + newWidth);
+            scaledBitmap = Bitmap.createBitmap(bitmap, (width - newWidth) / 2, 0, newWidth, height, new Matrix(), true);
+        }
 
         // Create a new bitmap and convert it to a format understood by the ImageView
-        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
         width = scaledBitmap.getWidth(); // re-use
         height = scaledBitmap.getHeight(); // re-use
-        BitmapDrawable result = new BitmapDrawable(scaledBitmap);
         Log.i("Test", "scaled width = " + Integer.toString(width));
         Log.i("Test", "scaled height = " + Integer.toString(height));
 
         // Apply the scaled bitmap
-        view.setImageDrawable(result);
-
-        // Now change ImageView's dimensions to match the scaled image
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-        params.width = width;
-        params.height = height;
-        view.setLayoutParams(params);
-
-        Log.i("Test", "done");
-    }
-
-    private int dpToPx(int dp) {
-        float density = getApplicationContext().getResources().getDisplayMetrics().density;
-        return Math.round((float)dp * density);
+        view.setImageBitmap(scaledBitmap);
     }
 }

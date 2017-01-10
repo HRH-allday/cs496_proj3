@@ -3,12 +3,20 @@ package com.example.q.wifitest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -21,6 +29,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 /**
  * Created by q on 2017-01-05.
@@ -38,7 +47,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
     private BackgroundFragment bf = null;
     private FontFragment ff = null;
     private EtcFragment ef = null;
-    private ShopActivity sa;
+    private ShopActivity shopActivity;
     private int job;
 
 
@@ -46,23 +55,26 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
         mContext = context;
         this.from = from;
     }
-    public ShopFragmentAdapter(Context context, int from, BackgroundFragment backgroundFragment) {
+    public ShopFragmentAdapter(Context context, int from, BackgroundFragment backgroundFragment, ShopActivity shopActivity) {
         mContext = context;
         this.from = from;
         this.bf = backgroundFragment;
         this.job = 0;
+        this.shopActivity = shopActivity;
     }
-    public ShopFragmentAdapter(Context context, int from, FontFragment fontFragment) {
+    public ShopFragmentAdapter(Context context, int from, FontFragment fontFragment, ShopActivity shopActivity) {
         mContext = context;
         this.from = from;
         this.ff = fontFragment;
         this.job = 1;
+        this.shopActivity = shopActivity;
     }
-    public ShopFragmentAdapter(Context context, int from, EtcFragment etcFragment) {
+    public ShopFragmentAdapter(Context context, int from, EtcFragment etcFragment, ShopActivity shopActivity) {
         mContext = context;
         this.from = from;
         this.ef = etcFragment;
         this.job = 2;
+        this.shopActivity = shopActivity;
     }
 
     @Override
@@ -87,10 +99,29 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder customViewHolder, final int position) {
+    public void onBindViewHolder(final CustomViewHolder customViewHolder, final int position) {
         switch (from) {
             case 0 :
                 customViewHolder.imageView.setImageResource(images[position]);
+                customViewHolder.imageView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Display display = shopActivity.getWindowManager().getDefaultDisplay();
+                        Point size = new Point();
+                        display.getSize(size);
+                        int screenWidth = size.x;
+                        int screenHeight = size.y;
+
+                        int imageHeight = customViewHolder.imageView.getHeight();
+
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) customViewHolder.imageView.getLayoutParams();
+                        params.width = (int)(((float) 1440 / 2560) * imageHeight);
+
+                        customViewHolder.imageView.setLayoutParams(params);
+
+                        scaleImage(customViewHolder.imageView);
+                    }
+                });
                 break;
             case 1 :
                 customViewHolder.textView.setText(texts[position]);
@@ -186,13 +217,13 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
             super(view);
             switch (from) {
                 case 0 :
-                    this.imageView = (ImageView) view.findViewById(R.id.background_item_image);
+                    imageView = (ImageView) view.findViewById(R.id.background_item_image);
                     break;
                 case 1 :
-                    this.textView = (TextView) view.findViewById(R.id.font_item_text);
+                    textView = (TextView) view.findViewById(R.id.font_item_text);
                     break;
                 case 2 :
-                    this.textView = (TextView) view.findViewById(R.id.etc_item_text);
+                    textView = (TextView) view.findViewById(R.id.etc_item_text);
                     break;
             }
         }
@@ -316,5 +347,59 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 e.printStackTrace();
             }
         }
+    }
+
+    private void scaleImage(ImageView view) throws NoSuchElementException {
+        // Get bitmap from the the ImageView.
+        Bitmap bitmap = null;
+
+        Drawable drawing = view.getDrawable();
+        bitmap = ((BitmapDrawable) drawing).getBitmap();
+
+        // Get current dimensions AND the desired bounding box
+        int width = 0;
+        int height = 0;
+
+        try {
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException("Can't find bitmap on given view/drawable");
+        }
+
+        int boundingWidth = view.getWidth();
+        int boundingHeight = view.getHeight();
+        Log.i("Test", "original width = " + Integer.toString(width));
+        Log.i("Test", "original height = " + Integer.toString(height));
+        Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));
+        Log.i("Test", "bounding height = " + Integer.toString(boundingHeight));
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) boundingWidth) / width;
+        float yScale = ((float) boundingHeight) / height;
+        Log.i("Test", "xScale = " + Float.toString(xScale));
+        Log.i("Test", "yScale = " + Float.toString(yScale));
+
+        Bitmap scaledBitmap;
+        if (xScale > yScale) {
+            int newHeight = (int) (boundingHeight / xScale);
+            Log.i("Test", "new height = " + newHeight);
+            scaledBitmap = Bitmap.createBitmap(bitmap, 0, (height - newHeight) / 2 , width, newHeight, new Matrix(), true);
+        } else {
+            int newWidth = (int) (boundingWidth / yScale);
+            Log.i("Test", "new width = " + newWidth);
+            scaledBitmap = Bitmap.createBitmap(bitmap, (width - newWidth) / 2, 0, newWidth, height, new Matrix(), true);
+        }
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        width = scaledBitmap.getWidth(); // re-use
+        height = scaledBitmap.getHeight(); // re-use
+        Log.i("Test", "scaled width = " + Integer.toString(width));
+        Log.i("Test", "scaled height = " + Integer.toString(height));
+
+        // Apply the scaled bitmap
+        view.setImageBitmap(scaledBitmap);
     }
 }

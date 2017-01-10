@@ -1,7 +1,12 @@
 package com.example.q.wifitest;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 
 /**
  * Created by q on 2017-01-05.
@@ -76,6 +82,12 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
         switch (from) {
             case 0 :
                 customViewHolder.imageView.setImageResource(images[i]);
+                customViewHolder.imageView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        scaleImage(customViewHolder.imageView);
+                    }
+                });
                 break;
             case 1 :
                 customViewHolder.textView.setText(texts[i]);
@@ -193,19 +205,61 @@ public class CustomizeFragmentAdapter extends RecyclerView.Adapter<CustomizeFrag
 
         @Override
         protected void onPostExecute(JSONArray jarray) {
-            /*
-            try {
-                bought_items = new ArrayList<>();
 
-                for (int i = 0; i < jarray.length(); i++) {
-                    bought_items.add(jarray.getInt(i));
-                }
-
-                Collections.sort(bought_items);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            */
         }
+    }
+
+    private void scaleImage(ImageView view) throws NoSuchElementException {
+        // Get bitmap from the the ImageView.
+        Bitmap bitmap = null;
+
+        Drawable drawing = view.getDrawable();
+        bitmap = ((BitmapDrawable) drawing).getBitmap();
+
+        // Get current dimensions AND the desired bounding box
+        int width = 0;
+        int height = 0;
+
+        try {
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException("Can't find bitmap on given view/drawable");
+        }
+
+        int boundingWidth = view.getWidth();
+        int boundingHeight = view.getHeight();
+        Log.i("Test", "original width = " + Integer.toString(width));
+        Log.i("Test", "original height = " + Integer.toString(height));
+        Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));
+        Log.i("Test", "bounding height = " + Integer.toString(boundingHeight));
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) boundingWidth) / width;
+        float yScale = ((float) boundingHeight) / height;
+        Log.i("Test", "xScale = " + Float.toString(xScale));
+        Log.i("Test", "yScale = " + Float.toString(yScale));
+
+        Bitmap scaledBitmap;
+        if (xScale > yScale) {
+            int newHeight = (int) (boundingHeight / xScale);
+            Log.i("Test", "new height = " + newHeight);
+            scaledBitmap = Bitmap.createBitmap(bitmap, 0, (height - newHeight) / 2 , width, newHeight, new Matrix(), true);
+        } else {
+            int newWidth = (int) (boundingWidth / yScale);
+            Log.i("Test", "new width = " + newWidth);
+            scaledBitmap = Bitmap.createBitmap(bitmap, (width - newWidth) / 2, 0, newWidth, height, new Matrix(), true);
+        }
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        width = scaledBitmap.getWidth(); // re-use
+        height = scaledBitmap.getHeight(); // re-use
+        Log.i("Test", "scaled width = " + Integer.toString(width));
+        Log.i("Test", "scaled height = " + Integer.toString(height));
+
+        // Apply the scaled bitmap
+        view.setImageBitmap(scaledBitmap);
     }
 }

@@ -29,7 +29,7 @@ public class EtcFragment extends Fragment {
         backgroundList.setLayoutManager(layoutManager);
 
         if (from == MainActivity.CREATED_FROM_SHOP)
-            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 2, this);
+            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 2, this, (ShopActivity) getActivity());
         else if (from == MainActivity.CREATED_FROM_CUSTOMIZE)
             adapter = (RecyclerView.Adapter) new CustomizeFragmentAdapter((CustomizeActivity)getActivity(), 2);
         backgroundList.setAdapter(adapter);

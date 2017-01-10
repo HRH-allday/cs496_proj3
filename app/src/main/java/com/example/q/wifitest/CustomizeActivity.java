@@ -3,15 +3,20 @@ package com.example.q.wifitest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -35,6 +40,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static com.example.q.wifitest.MainActivity.coin;
 
@@ -181,6 +187,12 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
 
         background_index = Integer.parseInt(intent.getExtras().getString("background_value"));
         imageView.setImageResource(MainActivity.images[background_index]);
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                scaleImage(imageView);
+            }
+        });
 
         font_index = Arrays.copyOf(intent.getExtras().getIntegerArrayList("font").toArray(),
                 intent.getExtras().getIntegerArrayList("font").toArray().length,
@@ -247,6 +259,12 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
 
     public void setPreviewBackground(int index) {
         imageView.setImageResource(MainActivity.images[index]);
+        imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                scaleImage(imageView);
+            }
+        });
         background_index = index;
     }
 
@@ -395,5 +413,59 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 e.printStackTrace();
             }
         }
+    }
+
+    private void scaleImage(ImageView view) throws NoSuchElementException {
+        // Get bitmap from the the ImageView.
+        Bitmap bitmap = null;
+
+        Drawable drawing = view.getDrawable();
+        bitmap = ((BitmapDrawable) drawing).getBitmap();
+
+        // Get current dimensions AND the desired bounding box
+        int width = 0;
+        int height = 0;
+
+        try {
+            width = bitmap.getWidth();
+            height = bitmap.getHeight();
+        } catch (NullPointerException e) {
+            throw new NoSuchElementException("Can't find bitmap on given view/drawable");
+        }
+
+        int boundingWidth = view.getWidth();
+        int boundingHeight = view.getHeight();
+        Log.i("Test", "original width = " + Integer.toString(width));
+        Log.i("Test", "original height = " + Integer.toString(height));
+        Log.i("Test", "bounding width = " + Integer.toString(boundingWidth));
+        Log.i("Test", "bounding height = " + Integer.toString(boundingHeight));
+
+        // Determine how much to scale: the dimension requiring less scaling is
+        // closer to the its side. This way the image always stays inside your
+        // bounding box AND either x/y axis touches it.
+        float xScale = ((float) boundingWidth) / width;
+        float yScale = ((float) boundingHeight) / height;
+        Log.i("Test", "xScale = " + Float.toString(xScale));
+        Log.i("Test", "yScale = " + Float.toString(yScale));
+
+        Bitmap scaledBitmap;
+        if (xScale > yScale) {
+            int newHeight = (int) (boundingHeight / xScale);
+            Log.i("Test", "new height = " + newHeight);
+            scaledBitmap = Bitmap.createBitmap(bitmap, 0, (height - newHeight) / 2 , width, newHeight, new Matrix(), true);
+        } else {
+            int newWidth = (int) (boundingWidth / yScale);
+            Log.i("Test", "new width = " + newWidth);
+            scaledBitmap = Bitmap.createBitmap(bitmap, (width - newWidth) / 2, 0, newWidth, height, new Matrix(), true);
+        }
+
+        // Create a new bitmap and convert it to a format understood by the ImageView
+        width = scaledBitmap.getWidth(); // re-use
+        height = scaledBitmap.getHeight(); // re-use
+        Log.i("Test", "scaled width = " + Integer.toString(width));
+        Log.i("Test", "scaled height = " + Integer.toString(height));
+
+        // Apply the scaled bitmap
+        view.setImageBitmap(scaledBitmap);
     }
 }

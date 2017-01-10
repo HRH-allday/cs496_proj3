@@ -12,7 +12,7 @@
 
     <style name="PreviewTabLayout" parent="Widget.Design.TabLayout">
             <item name="tabTextAppearance">@style/PreviewTabText</item>
-        <item name="tabSelectedTextColor">#AAAAAA</item>
+        <item name="tabSelectedTextColor">#BBBBBB</item>
     </style>
 
     <style name="PreviewTabText" parent="TextAppearance.AppCompat.Button">

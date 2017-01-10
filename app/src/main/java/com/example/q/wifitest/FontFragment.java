@@ -30,7 +30,7 @@ public class FontFragment extends Fragment {
         backgroundList.setLayoutManager(layoutManager);
 
         if (from == MainActivity.CREATED_FROM_SHOP)
-            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 1, this);
+            adapter = (RecyclerView.Adapter) new ShopFragmentAdapter(getContext(), 1, this, (ShopActivity) getActivity());
         else if (from == MainActivity.CREATED_FROM_CUSTOMIZE)
             adapter = (RecyclerView.Adapter) new CustomizeFragmentAdapter((CustomizeActivity)getActivity(), 1);
         backgroundList.setAdapter(adapter);
