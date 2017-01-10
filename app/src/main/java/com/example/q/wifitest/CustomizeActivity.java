@@ -64,8 +64,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     static final int numViews = 3;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,6 +180,41 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
             }
         });
 
+        initializePreviewUI();
+    }
+
+    private void initializePreviewUI() {
+        Intent intent = getIntent();
+
+        background_index = Integer.parseInt(intent.getExtras().getString("background_value"));
+        imageView.setImageResource(MainActivity.images[background_index]);
+
+        font_index = intent.getExtras().getIntArray("font");
+        for(int i = 0 ; i < numViews ; i++)
+            textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[font_index[i]]));
+
+        color_index = intent.getExtras().getStringArray("font_color");
+        for(int i = 0 ; i < numViews ; i++)
+            textViews[i].setTextColor(Color.parseColor("#"+color_index[i]));
+
+        size_index = intent.getExtras().getIntArray("font_size");
+        for(int i = 0 ; i < numViews ; i++)
+            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size_index[i]);
+
+        space_index = intent.getExtras().getBooleanArray("etc_isspaced");
+        for(int i = 0 ; i < numViews ; i++){
+            if(space_index[i]) {
+                if (i == 2)
+                    textViews[i].setText(getResources().getString(spacedTexts[i]) + MainActivity.coin + "원");
+                else
+                    textViews[i].setText(spacedTexts[i]);
+            } else {
+                if (i == 2)
+                    textViews[i].setText(getResources().getString(unspacedTexts[i]) + MainActivity.coin + "원");
+                else
+                    textViews[i].setText(unspacedTexts[i]);
+            }
+        }
     }
 
     @Override
