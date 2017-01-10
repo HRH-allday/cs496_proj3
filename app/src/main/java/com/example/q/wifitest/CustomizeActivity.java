@@ -210,7 +210,7 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 Integer[].class);
         for(int i = 0 ; i < numViews ; i++)
             if (size_index[i] != -1) {
-                textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size_index[i]);
+                textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, ((float) size_index[i] * 5 / 8));
             }
 
         space_index = Arrays.copyOf(((ArrayList<Boolean>)intent.getExtras().get("etc_isspaced")).toArray(),
