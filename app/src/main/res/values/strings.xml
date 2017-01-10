@@ -12,7 +12,7 @@
     <string name="text_unspaced0">이것이지금당신의UI.</string>
     <string name="text_spaced1">\" 고조선 \"</string>
     <string name="text_unspaced1">\"고조선\"</string>
-    <string name="text_spaced2">자산 : </string>
+    <string name="text_spaced2">자산 :\u0020</string>
     <string name="text_unspaced2">자산:</string>
 
 

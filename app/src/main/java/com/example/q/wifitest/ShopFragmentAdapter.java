@@ -28,8 +28,11 @@ import java.util.Arrays;
 
 public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapter.CustomViewHolder>{
     private Integer[] images = Arrays.copyOfRange(MainActivity.images, 1, MainActivity.images.length);
-    private Integer[] imagePrices = {20, 30, 40, 50, 60, 70};
+    private Integer[] imagePrices = {100, 150, 200, 250, 300, 500};
+    private Integer[] fontPrices = {100, 150, 200, 250, 300, 500};
+    private Integer[] etcPrices = {300, 300, 300};
     private Integer[] texts = Arrays.copyOfRange(MainActivity.texts, 1, MainActivity.texts.length);
+    private String[] etcProducts = {"폰트 크기", "폰트 색", "띄어쓰기"};
     private int from;
     private Context mContext;
     private BackgroundFragment bf = null;
@@ -37,7 +40,6 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
     private EtcFragment ef = null;
     private ShopActivity sa;
     private int job;
-    private int money;
 
 
     public ShopFragmentAdapter(Context context, int from) {
@@ -66,7 +68,6 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view;
-        this.money = MainActivity.coin;
         switch (from) {
             case 0 :
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.background_item, viewGroup, false);
@@ -95,15 +96,41 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                 customViewHolder.textView.setText(texts[position]);
                 break;
             case 2 :
-                customViewHolder.textView.setText(texts[position]);
+                customViewHolder.textView.setText(etcProducts[position]);
                 break;
         }
 
         customViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final int price = imagePrices[position];
-                if(price > money){
+                final int price;
+                switch (from){
+                    case 0:
+                        price = imagePrices[position];
+                        break;
+                    case 1:
+                        price = fontPrices[position];
+                        break;
+                    case 2:
+                        price = etcPrices[position];
+                        break;
+                    default:
+                        price = -1;
+                        break;
+                }
+                if(price == -1){
+                    AlertDialog.Builder badRequest = new AlertDialog.Builder(mContext);
+                    badRequest.setTitle("Error");
+                    badRequest.setMessage("잘못된 요청입니다");
+                    badRequest.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    badRequest.show();
+                    return;
+                }
+                else if(price > MainActivity.coin){
                     AlertDialog.Builder noMoney = new AlertDialog.Builder(mContext);
                     noMoney.setTitle("Need More Money");
                     noMoney.setMessage("돈이 부족합니다");
@@ -112,6 +139,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                             dialog.cancel();
                         }
                     });
+                    noMoney.show();
                     return;
                 }
                 else {
@@ -120,7 +148,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                     buyDialog.setMessage(position + 1 + "번째 아이템을 구입하시겠습니까?");
                     buyDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            new ShopFragmentAdapter.SaveBuyInfo().execute(from, position, price);
+                            new SaveBuyInfo().execute(from, position, price);
                             dialog.cancel();
                         }
                     });
@@ -137,7 +165,17 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
 
     @Override
     public int getItemCount() {
-        return images.length;
+        switch (from) {
+            case 0 :
+                return images.length;
+            case 1:
+                return texts.length;
+            case 2:
+                return etcProducts.length;
+            default:
+                return 0;
+
+        }
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
@@ -188,7 +226,7 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                     jobject.put("buy_item", position + 1);
                 else
                     jobject.put("buy_item", position);
-                jobject.put("left_money", money);
+                jobject.put("left_money",MainActivity.coin);
 
                 OutputStream out_stream = conn.getOutputStream();
 
@@ -241,19 +279,19 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                     });
                     buyCompleteDialog.show();
 
-                    money -= jobject.getInt("price");
+                    MainActivity.coin -= jobject.getInt("price");
                     switch (job) {
                         case 0 :
-                            bf.onShopClickHandler(money);
+                            bf.onShopClickHandler(MainActivity.coin);
                             break;
                         case 1 :
-                            ff.onShopClickHandler(money);
+                            ff.onShopClickHandler(MainActivity.coin);
                             break;
                         case 2 :
-                            ef.onShopClickHandler(money);
+                            ef.onShopClickHandler(MainActivity.coin);
                             break;
                     }
-                } else {
+                } else if (jobject.getString("result").compareTo("error") == 0) {
                     AlertDialog.Builder alreadyBoughtDialog = new AlertDialog.Builder(mContext);
                     alreadyBoughtDialog.setTitle("Already Bought");
                     alreadyBoughtDialog.setMessage("이미 구입하셨던 항목입니다.");
@@ -263,6 +301,16 @@ public class ShopFragmentAdapter extends RecyclerView.Adapter<ShopFragmentAdapte
                         }
                     });
                     alreadyBoughtDialog.show();
+                } else if (jobject.getString("result").compareTo("bad request") == 0) {
+                    AlertDialog.Builder badRequestDialog = new AlertDialog.Builder(mContext);
+                    badRequestDialog.setTitle("Bad Request");
+                    badRequestDialog.setMessage("잘못된 요청입니다.");
+                    badRequestDialog.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    badRequestDialog.show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -97,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), CustomizeActivity.class);
                 i.putExtra("background_isdefault", current_background_value);
                 i.putExtra("background_value", current_background_value);
-                i.putExtra("font", current_font.toArray());
-                i.putExtra("font_size", current_font_size.toArray());
-                i.putExtra("font_color", current_font_color.toArray());
-                i.putExtra("etc_isspaced", current_etc_isspaced.toArray());
+                i.putExtra("font", current_font);
+                i.putExtra("font_size", current_font_size);
+                i.putExtra("font_color", current_font_color);
+                i.putExtra("etc_isspaced", current_etc_isspaced);
                 startActivityForResult(i, SAVE_NEW_THEME);
                 overridePendingTransition(R.anim.anim_slide_in_right, R.anim.anim_slide_out_left);
             }
@@ -146,14 +146,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         new GetUserData().execute();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == SAVE_NEW_THEME) {
-            if (data.getExtras().getInt("background_index") != -1)
-                imageView.setImageResource(images[data.getExtras().getInt("background_index")]);
-        }
     }
 
     private class GetUserData extends AsyncTask<Void, Void, JSONObject> {
@@ -263,10 +255,7 @@ public class MainActivity extends AppCompatActivity {
                         textViews[i].setText(unspacedTexts[i]);
                         coinView.setText("자산:"+coin+"원");
                     }
-
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

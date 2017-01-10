@@ -20,7 +20,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +27,16 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static com.example.q.wifitest.MainActivity.coin;
 
 /**
  * Created by q on 2017-01-05.
@@ -45,16 +47,14 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
     private ViewPager viewPager;
     private CustomizeAdapter adapter;
     private ImageView imageView;
-    private TextView coinView;
-    private RelativeLayout relativeLayout;
     private FrameLayout frameLayout;
     private FloatingActionButton selectAllBtn;
     private Button save_btn;
     private int background_index;
-    private int[] font_index = new int[numViews];
+    private Integer[] font_index = new Integer[numViews];
     private String[] color_index = new String[numViews];
-    private int[] size_index = new int[numViews];
-    private boolean[] space_index = new boolean[numViews];
+    private Integer[] size_index = new Integer[numViews];
+    private Boolean[] space_index = new Boolean[numViews];
     private TextView[] textViews = new TextView[numViews];
     private boolean[] isTextViewSelected = { false, false, false };
     static final Integer[] texts = { R.string.font0, R.string.font1, R.string.font2, R.string.font3, R.string.font4, R.string.font5, R.string.font6 };
@@ -86,7 +86,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         tabLayout.addOnTabSelectedListener(this);
 
         imageView = (ImageView) findViewById(R.id.customize_preview_background);
-        relativeLayout = (RelativeLayout) findViewById(R.id.customize_preview_texts);
         frameLayout = (FrameLayout) findViewById(R.id.customize_framelayout);
 
         frameLayout.post(new Runnable() {
@@ -120,11 +119,9 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                 public void onClick(View v) {
                     if (isTextViewSelected[index]) {
                         isTextViewSelected[index] = false;
-                        // TODO : 애니메이션 변경
                         textViews[index].setBackgroundResource(0);
                     } else {
                         isTextViewSelected[index] = true;
-                        // TODO : 애니메이션 변경
                         textViews[index].setBackgroundResource(R.drawable.text_border);
                    }
                 }
@@ -139,7 +136,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
                     if (!isTextViewSelected[i]) {
                         for (int j = 0; j < numViews; j++) {
                             isTextViewSelected[j] = true;
-                            // TODO : 애니메이션
                             textViews[j].setBackgroundResource(R.drawable.text_border);
                         }
                         return;
@@ -148,14 +144,11 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
 
                 for (int i = 0; i < numViews; i++) {
                     isTextViewSelected[i] = false;
-                    // TODO : 애니메이션 변경
                     textViews[i].setBackgroundResource(0);
                 }
             }
         });
 
-        coinView = (TextView) findViewById(R.id.customize_preview_coin);
-        coinView.setText("자산 : "+MainActivity.coin +"원");
 
         save_btn = (Button) findViewById(R.id.customize_save_btn);
         save_btn.setOnClickListener(new View.OnClickListener() {
@@ -189,32 +182,46 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         background_index = Integer.parseInt(intent.getExtras().getString("background_value"));
         imageView.setImageResource(MainActivity.images[background_index]);
 
-        font_index = intent.getExtras().getIntArray("font");
+        font_index = Arrays.copyOf(intent.getExtras().getIntegerArrayList("font").toArray(),
+                intent.getExtras().getIntegerArrayList("font").toArray().length,
+                Integer[].class);
         for(int i = 0 ; i < numViews ; i++)
             textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[font_index[i]]));
 
-        color_index = intent.getExtras().getStringArray("font_color");
+        color_index = Arrays.copyOf(intent.getExtras().getStringArrayList("font_color").toArray(),
+                intent.getExtras().getStringArrayList("font_color").toArray().length,
+                String[].class);
         for(int i = 0 ; i < numViews ; i++)
-            textViews[i].setTextColor(Color.parseColor("#"+color_index[i]));
+            if (!color_index[i].equals("-1")) {
+                textViews[i].setTextColor(Color.parseColor(color_index[i]));
+            }
 
-        size_index = intent.getExtras().getIntArray("font_size");
+        size_index = Arrays.copyOf(intent.getExtras().getIntegerArrayList("font_size").toArray(),
+                intent.getExtras().getIntegerArrayList("font_size").toArray().length,
+                Integer[].class);
         for(int i = 0 ; i < numViews ; i++)
-            textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size_index[i]);
+            if (size_index[i] != -1) {
+                textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size_index[i]);
+            }
 
-        space_index = intent.getExtras().getBooleanArray("etc_isspaced");
+        space_index = Arrays.copyOf(((ArrayList<Boolean>)intent.getExtras().get("etc_isspaced")).toArray(),
+                ((ArrayList<Boolean>)intent.getExtras().get("etc_isspaced")).toArray().length,
+                Boolean[].class);
         for(int i = 0 ; i < numViews ; i++){
             if(space_index[i]) {
                 if (i == 2)
-                    textViews[i].setText(getResources().getString(spacedTexts[i]) + MainActivity.coin + "원");
+                    textViews[i].setText(getResources().getString(spacedTexts[i]) + coin + "원");
                 else
                     textViews[i].setText(spacedTexts[i]);
             } else {
                 if (i == 2)
-                    textViews[i].setText(getResources().getString(unspacedTexts[i]) + MainActivity.coin + "원");
+                    textViews[i].setText(getResources().getString(unspacedTexts[i]) + coin + "원");
                 else
                     textViews[i].setText(unspacedTexts[i]);
             }
         }
+
+
     }
 
     @Override
@@ -247,7 +254,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         for(int i = 0 ; i < numViews ; i++){
             if(isTextViewSelected[i]) {
                 textViews[i].setTypeface(Typeface.createFromAsset(getAssets(), fontNames[index]));
-                isTextViewSelected[i] = false;
                 font_index[i] = index;
             }
         }
@@ -257,7 +263,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         for(int i = 0 ; i < numViews ; i++){
             if(isTextViewSelected[i]) {
                 textViews[i].setTextColor(Color.parseColor("#"+colorCode));
-                isTextViewSelected[i] = false;
                 color_index[i] = "#"+colorCode;
             }
         }
@@ -267,7 +272,6 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
         for(int i = 0 ; i < numViews ; i++){
             if(isTextViewSelected[i]) {
                 textViews[i].setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
-                isTextViewSelected[i] = false;
                 size_index[i] = size;
             }
         }
@@ -278,13 +282,13 @@ public class CustomizeActivity extends AppCompatActivity implements TabLayout.On
             if(isTextViewSelected[i]) {
                 if(space_index[i]) {
                     if (i == 2)
-                        textViews[i].setText(getResources().getString(unspacedTexts[i]) + MainActivity.coin + "원");
+                        textViews[i].setText(getResources().getString(unspacedTexts[i]) + coin + "원");
                     else
                         textViews[i].setText(unspacedTexts[i]);
                     space_index[i] = false;
                 } else {
                     if (i == 2)
-                        textViews[i].setText(getResources().getString(spacedTexts[i]) + MainActivity.coin + "원");
+                        textViews[i].setText(getResources().getString(spacedTexts[i]) + coin + "원");
                     else
                         textViews[i].setText(spacedTexts[i]);
                     space_index[i] = true;
